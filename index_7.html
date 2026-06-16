@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1D9E75">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Cestina Snadno — 25 urokov</title>
+<style>
+:root{--g:#1D9E75;--gd:#0F6E56;--gl:#E1F5EE;--pu:#7F77DD;--pl:#EEEDFE;--or:#D85A30;--ol:#FAECE7;--am:#EF9F27;--bdr:#E0E0E0;--txt:#1A1A1A;--txt2:#666;--bg:#F4F6F8;--r:14px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,Roboto,sans-serif;background:var(--bg);overflow:hidden;height:100vh}
+#topbar{position:fixed;top:0;left:0;right:0;z-index:999;background:linear-gradient(135deg,var(--g),var(--gd));padding:0 14px;height:58px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+#tb-flag{font-size:24px;flex-shrink:0}
+#tb-info{flex:1;min-width:0}
+#tb-name{font-size:15px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tb-sub{font-size:10px;color:rgba(255,255,255,.75)}
+#tb-tm{background:rgba(0,0,0,.2);border-radius:10px;padding:4px 9px;flex-shrink:0;text-align:center}
+#tb-tm-t{font-size:12px;font-weight:900;color:var(--am)}
+#tb-tm-s{font-size:9px;color:rgba(255,255,255,.65)}
+#bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:999;background:#fff;border-top:1px solid var(--bdr);display:flex}
+.nvi{flex:1;border:none;background:none;padding:10px 2px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+.nvi-i{font-size:21px}.nvi-l{font-size:10px;font-weight:600;color:var(--txt2)}
+.nvi.on .nvi-l{color:var(--g)}.nvi.on .nvi-i{transform:scale(1.1)}
+#main{position:fixed;top:58px;bottom:64px;left:0;right:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.scr{display:none;padding:14px}.scr.on{display:block}
+/* SPLASH */
+#scr-splash{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 130px);padding:20px}
+.spl-card{width:180px;height:195px;background:var(--g);border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 6px 24px rgba(29,158,117,.35)}
+.spl-flag{font-size:32px;margin-bottom:4px}
+.spl-name{font-size:26px;font-weight:900;color:#fff;letter-spacing:-1px}
+.spl-sub{font-size:11px;color:rgba(255,255,255,.75);letter-spacing:2px;margin-top:2px}
+.spl-tm{background:rgba(0,0,0,.25);border-radius:9px;padding:5px 11px;margin-top:8px;text-align:center}
+.spl-tm-t{font-size:13px;font-weight:900;color:var(--am)}
+.spl-tm-s{font-size:9px;color:rgba(255,255,255,.65);letter-spacing:1px}
+.spl-title{font-size:21px;font-weight:700;color:var(--txt);text-align:center;margin-bottom:8px}
+.spl-desc{font-size:14px;color:var(--txt2);text-align:center;line-height:1.6;margin-bottom:20px}
+.spl-stats{display:flex;gap:20px;margin-bottom:24px}
+.spl-sn{font-size:24px;font-weight:700;color:var(--g);text-align:center}
+.spl-sl{font-size:11px;color:var(--txt2);text-align:center}
+.spl-btn{width:100%;padding:15px;background:var(--g);color:#fff;border:none;border-radius:var(--r);font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 3px 14px rgba(29,158,117,.4)}
+/* HOME */
+.home-tip{background:var(--gl);border:1px solid #9FE1CB;border-radius:var(--r);padding:13px;margin-bottom:13px}
+.home-tip-t{font-size:14px;font-weight:700;color:var(--gd);margin-bottom:4px}
+.home-tip-d{font-size:13px;color:#085041;line-height:1.5}
+#lesson-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.lcard{background:#fff;border:2px solid var(--bdr);border-radius:var(--r);padding:12px 10px;cursor:pointer;text-align:left;box-shadow:0 1px 3px rgba(0,0,0,.06);width:100%}
+.lcard:active{transform:scale(.97)}.lcard.done{border-color:#9FE1CB;background:var(--gl)}.lcard.cur{border-color:var(--g);background:#F0FAF6}
+.lcard-ic{font-size:21px;margin-bottom:4px}.lcard-num{font-size:10px;font-weight:700;color:var(--txt2);margin-bottom:2px}.lcard-name{font-size:12px;font-weight:600;color:var(--txt);line-height:1.3}
+/* LESSON */
+.lesson-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.lesson-title{font-size:18px;font-weight:700;color:var(--txt)}.lesson-sub{font-size:11px;color:var(--txt2)}
+.badge{font-size:11px;background:var(--gl);color:var(--gd);padding:3px 8px;border-radius:10px;font-weight:700}
+.pbar{background:#E8F5F1;border-radius:5px;height:6px;margin:6px 0 12px}.pfill{background:var(--g);height:6px;border-radius:5px;transition:width .4s}
+.tip{background:var(--gl);border:1px solid #9FE1CB;border-radius:var(--r);padding:10px 12px;font-size:13px;color:#085041;line-height:1.5;display:flex;gap:8px;margin-bottom:11px}
+.tip.pu{background:var(--pl);border-color:#AFA9EC;color:#3C3489}
+.dtabs{display:flex;gap:8px;margin-bottom:11px}
+.dtab{flex:1;padding:9px;border-radius:9px;font-size:13px;font-weight:600;border:2px solid var(--bdr);background:#fff;cursor:pointer;text-align:center;color:var(--txt2)}
+.dtab.on{border-color:var(--g);background:var(--gl);color:var(--gd)}.dtab.pu.on{border-color:var(--pu);background:var(--pl);color:#3C3489}
+.arow{display:flex;gap:9px;margin-bottom:11px;align-items:flex-start}
+.ava{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0;cursor:pointer;user-select:none}
+.ava.L{background:linear-gradient(135deg,#1D9E75,#0F6E56)}.ava.S{background:linear-gradient(135deg,#D85A30,#993C1D)}.ava.O{background:linear-gradient(135deg,#7F77DD,#534AB7)}
+.bub{flex:1;background:#fff;border-radius:0 12px 12px 12px;border:1px solid var(--bdr);padding:9px 11px}
+.bub.L{border-left:3px solid var(--g)}.bub.S{border-left:3px solid var(--or)}.bub.O{border-left:3px solid var(--pu)}
+.bwho{font-size:10px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.bcz{font-size:16px;font-weight:600;color:var(--txt);line-height:1.4}
+.bph{font-size:12px;color:var(--gd);font-style:italic;margin-top:2px}.bru{font-size:13px;color:var(--txt2);margin-top:2px;line-height:1.4}
+.crow{display:flex;align-items:center;gap:6px;margin-top:7px;flex-wrap:wrap}
+.pb{width:38px;height:38px;border-radius:50%;background:var(--g);border:none;color:#fff;font-size:16px;cursor:pointer;flex-shrink:0;transition:transform .1s;display:flex;align-items:center;justify-content:center}
+.pb:active{transform:scale(.9)}.pb.pu{background:var(--pu)}
+.sps{display:flex;gap:4px}
+.sp{padding:5px 11px;border-radius:14px;font-size:13px;font-weight:700;border:1.5px solid var(--bdr);background:#fff;color:var(--txt2);cursor:pointer;transition:all .15s}
+.sp.on{background:var(--g);color:#fff;border-color:var(--g)}
+.micbtn{display:flex;align-items:center;gap:5px;padding:7px 12px;border-radius:19px;border:1.5px solid var(--bdr);background:#fff;font-size:13px;font-weight:600;color:var(--txt2);cursor:pointer;transition:all .2s}
+/* Повторю! — зелёный оттенок (после Лючии) */
+.micbtn.mic-rep{border-color:var(--g);color:var(--gd);background:var(--gl)}
+.micbtn.mic-rep.rec{background:#C8EDD9;border-color:var(--gd);color:var(--gd)}
+.micbtn.rec{background:var(--ol);border-color:var(--or);color:var(--or)}
+.micbtn.pu-mic{border-color:var(--pu);color:var(--pu)}
+.micbtn.pu-mic.rec{background:var(--pl);border-color:var(--pu);color:var(--pu)}
+.rdot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pulse .8s infinite;display:inline-block}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(.6)}}
+.splayer{display:none;margin-top:7px;background:#FFF8F6;border:1.5px solid var(--or);border-radius:10px;padding:9px 11px}
+.splayer.show{display:block}.splayer.pu-pl{background:#F8F7FF;border-color:var(--pu)}
+.splayer-lbl{font-size:10px;font-weight:700;color:var(--or);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
+.splayer.pu-pl .splayer-lbl{color:var(--pu)}
+.spl-row{display:flex;align-items:center;gap:8px}
+.spl-play{width:32px;height:32px;border-radius:50%;background:var(--or);border:none;color:#fff;font-size:14px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.splayer.pu-pl .spl-play{background:var(--pu)}
+.spl-wave{flex:1;height:26px;background:#FFE8E3;border-radius:6px;display:flex;align-items:center;justify-content:center;gap:2px;padding:0 5px}
+.splayer.pu-pl .spl-wave{background:#EEEDFE}
+.sw{width:3px;border-radius:2px;background:var(--or);height:20%}
+.splayer.pu-pl .sw{background:var(--pu)}
+.cmp-row{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;align-items:center}
+.cmp-l{padding:5px 10px;border-radius:13px;background:var(--gl);border:1.5px solid var(--g);color:var(--gd);font-size:12px;font-weight:700;cursor:pointer}
+.cmp-me{padding:5px 10px;border-radius:13px;background:#FFF8F6;border:1.5px solid var(--or);color:var(--or);font-size:12px;font-weight:700;cursor:pointer}
+.cmp-me.pu{background:var(--pl);border-color:var(--pu);color:var(--pu)}
+.cmp-hint{font-size:11px;color:var(--txt2)}
+.done-btn{width:100%;margin-top:13px;padding:14px;background:var(--g);color:#fff;border:none;border-radius:var(--r);font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(29,158,117,.3)}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.wcard{background:#fff;border:1px solid var(--bdr);border-radius:var(--r);padding:11px 10px;cursor:pointer;text-align:left;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.wcard:active{background:var(--gl);border-color:var(--g)}
+.wic{font-size:20px;margin-bottom:4px}.wcz{font-size:14px;font-weight:700;color:var(--txt)}.wru{font-size:12px;color:var(--txt2);margin-top:2px}.wph{font-size:11px;color:var(--gd);font-style:italic;margin-top:2px}
+.excard{background:#fff;border-radius:var(--r);border:1px solid var(--bdr);padding:13px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.exnum{font-size:10px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.exq{font-size:15px;font-weight:500;color:var(--txt);line-height:1.5;margin-bottom:11px}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{padding:12px 13px;border-radius:9px;border:2px solid var(--bdr);background:#fff;font-size:15px;color:var(--txt);text-align:left;cursor:pointer;line-height:1.4}
+.opt:active{transform:scale(.98)}.opt.ok{background:var(--gl);border-color:var(--g);color:var(--gd);font-weight:600}.opt.no{background:var(--ol);border-color:var(--or);color:#993C1D}
+.fb{display:none;margin-top:8px;padding:10px 12px;border-radius:9px;font-size:14px;font-weight:600;line-height:1.4}
+.fb.ok{background:var(--gl);border:1px solid var(--g);color:var(--gd)}.fb.no{background:var(--ol);border:1px solid var(--or);color:#993C1D}
+.stat3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:11px}
+.stat{background:#fff;border-radius:var(--r);border:1px solid var(--bdr);padding:11px 8px;text-align:center}
+.statn{font-size:22px;font-weight:700;color:var(--g)}.statl{font-size:11px;color:var(--txt2);margin-top:2px}
+.pcard{background:#fff;border-radius:var(--r);border:1px solid var(--bdr);padding:12px;margin-bottom:10px}
+.pcard-t{font-size:14px;font-weight:700;color:var(--txt);margin-bottom:8px}
+.prow{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bdr)}
+.prow:last-child{border-bottom:none}.prow-ic{font-size:16px;width:24px;text-align:center}
+.prow-nm{flex:1;font-size:13px;color:var(--txt);font-weight:500}
+.pbdg{padding:2px 8px;border-radius:9px;font-size:11px;font-weight:600}
+.bdg-ok{background:var(--gl);color:var(--gd)}.bdg-now{background:#FFF3CD;color:#8B5A00}.bdg-lock{background:#F0F0F0;color:var(--txt2)}
+.scr-title{font-size:18px;font-weight:700;color:var(--txt);margin-bottom:3px}
+.scr-sub{font-size:13px;color:var(--txt2);margin-bottom:11px}
+
+/* ГОЛОСОВАЯ ИНСТРУКЦИЯ */
+#voice-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;padding:20px}
+#voice-modal.show{display:flex}
+.vm-box{background:#fff;border-radius:20px;padding:22px;max-width:380px;width:100%;max-height:90vh;overflow-y:auto}
+.vm-title{font-size:18px;font-weight:700;color:var(--txt);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.vm-sub{font-size:13px;color:var(--txt2);margin-bottom:16px;line-height:1.5}
+.vm-section{background:var(--gl);border:1px solid #9FE1CB;border-radius:12px;padding:12px;margin-bottom:12px}
+.vm-section.warn{background:#FFF8EC;border-color:#F5C842}
+.vm-section.err{background:var(--ol);border-color:var(--or)}
+.vm-section-t{font-size:13px;font-weight:700;color:var(--gd);margin-bottom:8px}
+.vm-section.warn .vm-section-t{color:#8B5A00}
+.vm-section.err .vm-section-t{color:var(--or)}
+.vm-step{font-size:13px;color:var(--txt);line-height:1.6;padding:3px 0}
+.vm-step b{color:var(--gd)}
+.vm-section.warn .vm-step b{color:#8B5A00}
+.vm-section.err .vm-step b{color:var(--or)}
+.vm-ok-btn{width:100%;padding:14px;background:var(--g);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-top:4px}
+.vm-skip{display:block;text-align:center;font-size:12px;color:var(--txt2);margin-top:10px;cursor:pointer;text-decoration:underline}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div id="tb-flag">&#x1F1E8;&#x1F1FF;</div>
+  <div id="tb-info">
+    <div id="tb-name">Cestina Snadno</div>
+    <div id="tb-sub">CHESHSKIJ LEGKO &middot; 25 UROKOV</div>
+  </div>
+  <div id="tb-tm">
+    <div id="tb-tm-t">OPAT 25! &reg;</div>
+    <div id="tb-tm-s">YAZYKI DLA ZHIZNI</div>
+  </div>
+</div>
+
+<div id="main">
+
+<div id="scr-splash" class="scr on">
+  <div class="spl-card">
+    <div class="spl-flag">&#x1F1E8;&#x1F1FF;</div>
+    <div class="spl-name">Cestina</div>
+    <div class="spl-sub">SNADNO</div>
+    <div class="spl-tm">
+      <div class="spl-tm-t">OPAT 25! &reg;</div>
+      <div class="spl-tm-s">YAZYKI DLA ZHIZNI</div>
+    </div>
+  </div>
+  <div class="spl-title">&#x427;&#x435;&#x448;&#x441;&#x43A;&#x438;&#x439; &#x44F;&#x437;&#x44B;&#x43A;<br>&#x434;&#x43B;&#x44F; &#x43F;&#x435;&#x43D;&#x441;&#x438;&#x43E;&#x43D;&#x435;&#x440;&#x43E;&#x432;</div>
+  <div class="spl-desc">25 &#x443;&#x440;&#x43E;&#x43A;&#x43E;&#x432; &#x436;&#x438;&#x432;&#x44B;&#x445; &#x434;&#x438;&#x430;&#x43B;&#x43E;&#x433;&#x43E;&#x432;.<br>&#x421;&#x43B;&#x443;&#x448;&#x430;&#x439;&#x442;&#x435;, &#x433;&#x43E;&#x432;&#x43E;&#x440;&#x438;&#x442;&#x435;, &#x437;&#x430;&#x43F;&#x438;&#x441;&#x44B;&#x432;&#x430;&#x439;&#x442;&#x435; &#x441;&#x435;&#x431;&#x44F;<br>&#x438; &#x441;&#x440;&#x430;&#x432;&#x43D;&#x438;&#x432;&#x430;&#x439;&#x442;&#x435; &#x441; &#x43D;&#x43E;&#x441;&#x438;&#x442;&#x435;&#x43B;&#x435;&#x43C; &#x44F;&#x437;&#x44B;&#x43A;&#x430;! &#x1F3A4;</div>
+  <div class="spl-stats">
+    <div><div class="spl-sn">25</div><div class="spl-sl">&#x443;&#x440;&#x43E;&#x43A;&#x43E;&#x432;</div></div>
+    <div><div class="spl-sn">500+</div><div class="spl-sl">&#x441;&#x43B;&#x43E;&#x432;</div></div>
+    <div><div class="spl-sn">&#x1F3A4;</div><div class="spl-sl">&#x437;&#x430;&#x43F;&#x438;&#x441;&#x44C;</div></div>
+  </div>
+  <button class="spl-btn" onclick="goHome()">&#x41D;&#x430;&#x447;&#x430;&#x442;&#x44C; &#x43E;&#x431;&#x443;&#x447;&#x435;&#x43D;&#x438;&#x435; &rarr;</button>
+</div>
+
+<div id="scr-home" class="scr">
+  <div class="scr-title">&#x1F1E8;&#x1F1FF; Cestina Snadno</div>
+  <div class="scr-sub">25 &#x443;&#x440;&#x43E;&#x43A;&#x43E;&#x432; &middot; A1 &rarr; A2+</div>
+  <div class="home-tip">
+    <div class="home-tip-t">&#x1F469;&#x200D;&#x1F3EB; &#x41B;&#x44E;&#x447;&#x438;&#x44F; &#x433;&#x43E;&#x432;&#x43E;&#x440;&#x438;&#x442;:</div>
+    <div class="home-tip-d">Vitejte! Zacinama! &#x2014; &#x414;&#x43E;&#x431;&#x440;&#x43E; &#x43F;&#x43E;&#x436;&#x430;&#x43B;&#x43E;&#x432;&#x430;&#x442;&#x44C;! &#x41D;&#x430;&#x447;&#x438;&#x43D;&#x430;&#x435;&#x43C;!</div>
+  </div>
+  <div id="lesson-grid"></div>
+</div>
+
+<div id="scr-lesson" class="scr"><div id="lesson-content"></div></div>
+
+<div id="scr-words" class="scr">
+  <div class="scr-title" id="words-title">&#x421;&#x43B;&#x43E;&#x432;&#x430; &#x443;&#x440;&#x43E;&#x43A;&#x430;</div>
+  <div class="scr-sub">&#x41D;&#x430;&#x436;&#x43C;&#x438;&#x442;&#x435; &#x43D;&#x430; &#x441;&#x43B;&#x43E;&#x432;&#x43E; &#x2014; &#x41B;&#x44E;&#x447;&#x438;&#x44F; &#x43F;&#x440;&#x43E;&#x438;&#x437;&#x43D;&#x435;&#x441;&#x451;&#x442;</div>
+  <div class="tip"><span>&#x1F50A;</span><span>&#x421;&#x43B;&#x443;&#x448;&#x430;&#x439;&#x442;&#x435; &#x438; &#x43F;&#x43E;&#x432;&#x442;&#x43E;&#x440;&#x44F;&#x439;&#x442;&#x435; &#x432;&#x441;&#x43B;&#x443;&#x445;!</span></div>
+  <div id="words-grid" class="wgrid"></div>
+</div>
+
+<div id="scr-exercise" class="scr">
+  <div class="scr-title">&#x417;&#x430;&#x434;&#x430;&#x43D;&#x438;&#x44F;</div>
+  <div class="scr-sub">&#x41B;&#x451;&#x433;&#x43A;&#x438;&#x435; &#x432;&#x43E;&#x43F;&#x440;&#x43E;&#x441;&#x44B; &#x2014; &#x432;&#x44B; &#x441;&#x43F;&#x440;&#x430;&#x432;&#x438;&#x442;&#x435;&#x441;&#x44C;!</div>
+  <div id="ex-content"></div>
+</div>
+
+<div id="scr-progress" class="scr">
+  <div class="scr-title">&#x41C;&#x43E;&#x439; &#x43F;&#x440;&#x43E;&#x433;&#x440;&#x435;&#x441;&#x441;</div>
+  <div class="scr-sub">&#x412;&#x44B; &#x43C;&#x43E;&#x43B;&#x43E;&#x434;&#x435;&#x446;! &#x1F31F;</div>
+  <div class="stat3">
+    <div class="stat"><div class="statn" id="p-l">0</div><div class="statl">&#x443;&#x440;&#x43E;&#x43A;&#x43E;&#x432;</div></div>
+    <div class="stat"><div class="statn" style="color:var(--pu)" id="p-w">0</div><div class="statl">&#x441;&#x43B;&#x43E;&#x432;</div></div>
+    <div class="stat"><div class="statn" style="font-size:18px">&#x1F525; 1</div><div class="statl">&#x434;&#x43D;&#x435;&#x439;</div></div>
+  </div>
+  <div class="pcard">
+    <div class="pcard-t">&#x1F1E8;&#x1F1FF; Cestina Snadno &#x2014; 25 &#x443;&#x440;&#x43E;&#x43A;&#x43E;&#x432;</div>
+    <div id="prog-list"></div>
+  </div>
+  <div class="pcard">
+    <div class="pcard-t">&#x1F469;&#x200D;&#x1F3EB; &#x412;&#x430;&#x448;&#x430; &#x43A;&#x43E;&#x43C;&#x430;&#x43D;&#x434;&#x430;</div>
+    <div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--bdr)">
+      <div class="ava L" style="width:38px;height:38px;font-size:14px">&#x41B;</div>
+      <div><div style="font-weight:700;font-size:14px">&#x41B;&#x44E;&#x447;&#x438;&#x44F;</div><div style="font-size:12px;color:var(--txt2)">&#x423;&#x447;&#x438;&#x442;&#x435;&#x43B;&#x44C;&#x43D;&#x438;&#x446;&#x430; &middot; &#x41D;&#x43E;&#x441;&#x438;&#x442;&#x435;&#x43B;&#x44C; &#x44F;&#x437;&#x44B;&#x43A;&#x430;</div></div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;padding:8px 0">
+      <div class="ava O" style="width:38px;height:38px;font-size:14px">&#x41E;</div>
+      <div><div style="font-weight:700;font-size:14px">&#x41E;&#x43B;&#x44C;&#x433;&#x430;</div><div style="font-size:12px;color:var(--txt2)">&#x41F;&#x43E;&#x434;&#x440;&#x443;&#x433;&#x430; &#x43F;&#x43E; &#x443;&#x447;&#x451;&#x431;&#x435; &middot; &#x423;&#x440;&#x43E;&#x432;&#x435;&#x43D;&#x44C; A2</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО: НАСТРОЙКА ГОЛОСА -->
+<div id="voice-modal">
+  <div class="vm-box">
+    <div class="vm-title">🔊 Настройка голоса</div>
+    <div class="vm-sub">Для правильного произношения чешских слов нужен чешский голос на вашем устройстве.</div>
+
+    <div class="vm-section" id="vm-ok" style="display:none">
+      <div class="vm-section-t">✅ Чешский голос найден!</div>
+      <div class="vm-step">Голос: <b id="vm-voice-name">—</b></div>
+      <div class="vm-step">Произношение будет правильным. Приятного обучения!</div>
+    </div>
+
+    <div class="vm-section err" id="vm-err" style="display:none">
+      <div class="vm-section-t">⚠️ Чешский голос не найден</div>
+      <div class="vm-step">Без чешского голоса слова могут произноситься неправильно (например, <b>byt</b> как «байт» вместо «бит»).</div>
+    </div>
+
+    <div class="vm-section warn" id="vm-android" style="display:none">
+      <div class="vm-section-t">📱 Android — установка чешского голоса</div>
+      <div class="vm-step"><b>1.</b> Настройки → Общие управление</div>
+      <div class="vm-step"><b>2.</b> Язык и ввод → Синтез речи</div>
+      <div class="vm-step"><b>3.</b> Нажмите ⚙️ у Google Text-to-Speech</div>
+      <div class="vm-step"><b>4.</b> Язык → добавить <b>Čeština (Česká republika)</b></div>
+      <div class="vm-step"><b>5.</b> Перезапустите приложение</div>
+    </div>
+
+    <div class="vm-section warn" id="vm-ios" style="display:none">
+      <div class="vm-section-t">🍎 iPhone / iPad — установка чешского голоса</div>
+      <div class="vm-step"><b>1.</b> Настройки → Универсальный доступ</div>
+      <div class="vm-step"><b>2.</b> Дикторский текст → Голоса</div>
+      <div class="vm-step"><b>3.</b> Найдите <b>Чешский</b> → выберите голос <b>Zuzana</b></div>
+      <div class="vm-step"><b>4.</b> Скачайте и перезапустите браузер</div>
+    </div>
+
+    <div class="vm-section warn" id="vm-win" style="display:none">
+      <div class="vm-section-t">💻 Windows — установка чешского голоса</div>
+      <div class="vm-step"><b>1.</b> Пуск → Параметры → Время и язык</div>
+      <div class="vm-step"><b>2.</b> Язык → Добавить язык → <b>Čeština</b></div>
+      <div class="vm-step"><b>3.</b> При установке отметьте «Синтез речи»</div>
+      <div class="vm-step"><b>4.</b> Перезапустите Chrome</div>
+    </div>
+
+    <div class="vm-section warn" id="vm-mac" style="display:none">
+      <div class="vm-section-t">🍎 Mac — установка чешского голоса</div>
+      <div class="vm-step"><b>1.</b> Apple меню → Системные настройки</div>
+      <div class="vm-step"><b>2.</b> Универсальный доступ → Дикторский текст</div>
+      <div class="vm-step"><b>3.</b> Системный голос → Настроить → <b>Zuzana (Czech)</b></div>
+      <div class="vm-step"><b>4.</b> Скачайте голос, перезапустите Chrome</div>
+    </div>
+
+    <button class="vm-ok-btn" onclick="closeVoiceModal()">Понятно, начать обучение! →</button>
+    <span class="vm-skip" onclick="closeVoiceModal()">Пропустить</span>
+  </div>
+</div>
+
+</div>
+
+<div id="bottomnav">
+  <button class="nvi" id="nb-home" onclick="goHome()"><span class="nvi-i">&#x1F3E0;</span><span class="nvi-l">&#x423;&#x440;&#x43E;&#x43A;&#x438;</span></button>
+  <button class="nvi" id="nb-lesson" onclick="goTab('lesson')"><span class="nvi-i">&#x1F4AC;</span><span class="nvi-l">&#x414;&#x438;&#x430;&#x43B;&#x43E;&#x433;</span></button>
+  <button class="nvi" id="nb-words" onclick="goTab('words')"><span class="nvi-i">&#x1F4D6;</span><span class="nvi-l">&#x421;&#x43B;&#x43E;&#x432;&#x430;</span></button>
+  <button class="nvi" id="nb-exercise" onclick="goTab('exercise')"><span class="nvi-i">&#x270F;&#xFE0F;</span><span class="nvi-l">&#x417;&#x430;&#x434;&#x430;&#x43D;&#x438;&#x435;</span></button>
+  <button class="nvi" id="nb-progress" onclick="goProgress()"><span class="nvi-i">&#x1F4CA;</span><span class="nvi-l">&#x41F;&#x440;&#x43E;&#x433;&#x440;&#x435;&#x441;&#x441;</span></button>
+</div>
+
+<script>
+
+var L = [
+{id:1,title:"Alfabet i zvuki",icon:"🔤",level:"A1",ru_title:"Алфавит и звуки",
+ words:[
+  {cz:"Dobrý den",ru:"Добрый день",ph:"[до́бри дэн]",ic:"☀️"},
+  {cz:"a e i o u — kratkie",ru:"краткие гласные",ph:"[а э и о у]",ic:"🔤"},
+  {cz:"a e i o u — dolgiye",ru:"долгие гласные",ph:"[аа ээ ии оо уу]",ic:"📢"},
+  {cz:"c = Ch",ru:"звук Ч как в чай",ph:"[ч]",ic:"🗣️"},
+  {cz:"s = Sh",ru:"звук Ш как в шум",ph:"[ш]",ic:"🗣️"},
+  {cz:"z = Zh",ru:"звук Ж как в жук",ph:"[ж]",ic:"🗣️"},
+  {cz:"r = osobyj zvuk",ru:"уникальный чешский звук",ph:"[рж]",ic:"🎵"},
+  {cz:"ch = H",ru:"звук Х как в хлеб",ph:"[х]",ic:"😤"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Dobrý den! Jsem Lucie. Vitejte!",ph:"[до́бри дэн! йсэм Лу́цие]",r:"Добрый день! Я Лючия. Добро пожаловать!"},
+  {w:"S",n:"Svetlana",t:"Dobrý den! Jsem Svetlana.",ph:"[до́бри дэн! йсэм Свэ́тлана]",r:"Добрый день! Я Светлана."},
+  {w:"L",n:"Lucie",t:"Opakujte po mně: á, é, í, ó, ú",ph:"[опакуйтэ по мнэ]",r:"Повторяйте за мной: а, э, и, о, у"},
+  {w:"S",n:"Svetlana",t:"a, e, i, o, u",ph:"[а, э, и, о, у]",r:"Повторяю звуки"},
+  {w:"L",n:"Lucie",t:"Výborně! A teď: č, š, ž, ř",ph:"[ви́борнэ! а тэдь]",r:"Отлично! А теперь: ч, ш, ж, рж"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Opakujte: Příliš žluťoučký kůň.",ph:"[пши́лиш жлутёучки кунь]",r:"Повторите скороговорку"},
+  {w:"O",n:"Olga",t:"Příliš žluťoučký kůň úpěl ďábelské ódy.",ph:"[пши́лиш жлутёучки кунь]",r:"Ольга справляется со скороговоркой!"}
+ ],
+ ex:[
+  {q:"Какой звук уникален только в чешском?",o:["ch (х)","r (рж)","s (ш)","z (ж)"],c:1,ok:"Правильно! r — уникальный чешский звук [рж]",no:"Нет. Уникальный звук — r [рж]"},
+  {q:"Как звучит долгая гласная?",o:["коротко","длинно протяжно","как Э","как О"],c:1,ok:"Верно! Долгие гласные произносятся протяжно",no:"Нет. Долгие гласные произносятся протяжно"}
+ ]
+},
+{id:2,title:"Cifry 1-20",icon:"🔢",level:"A1",ru_title:"Цифры 1–20",
+ words:[
+  {cz:"jedna / jeden",ru:"один / одна",ph:"[е́дна / е́ден]",ic:"1️⃣"},
+  {cz:"dva / dve",ru:"два / две",ph:"[два / двэ]",ic:"2️⃣"},
+  {cz:"tri / čtyři",ru:"три / четыре",ph:"[тши / чти́ши]",ic:"3️⃣"},
+  {cz:"pět / sest",ru:"пять / шесть",ph:"[пэть / шэст]",ic:"5️⃣"},
+  {cz:"sedm / osm",ru:"семь / восемь",ph:"[сэдм / осм]",ic:"7️⃣"},
+  {cz:"deset",ru:"десять",ph:"[дэ́сет]",ic:"🔟"},
+  {cz:"patnáct",ru:"пятнадцать",ph:"[па́тнаацт]",ic:"🔢"},
+  {cz:"dvacet",ru:"двадцать",ph:"[два́цет]",ic:"🔢"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Kolik je vám let, Světlano?",ph:"[ко́лик йэ ваам лет?]",r:"Сколько вам лет, Светлана?"},
+  {w:"S",n:"Svetlana",t:"Je mi šedesát let. A vám?",ph:"[йэ ми шедэса́т лет]",r:"Мне шестьдесят лет. А вам?"},
+  {w:"L",n:"Lucie",t:"Mně je čtyřicet pět.",ph:"[мнэ йэ чтиши́цет пэть]",r:"Мне сорок пять."},
+  {w:"S",n:"Svetlana",t:"Kolik stojí káva?",ph:"[ко́лик стойи́ ка́ва?]",r:"Сколько стоит кофе?"},
+  {w:"L",n:"Lucie",t:"Padesát korun. Výborně!",ph:"[падэса́т ко́рун. ви́борнэ!]",r:"Пятьдесят крон. Отлично!"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Kolik lidí je ve vaší rodině?",ph:"",r:"Сколько человек в вашей семье?"},
+  {w:"O",n:"Olga",t:"Jsme čtyři: já, manžel a dvě děti. Syn má sedm let a dcera deset.",ph:"[йсмэ чти́ши]",r:"Нас четверо: я, муж и двое детей."}
+ ],
+ ex:[
+  {q:"Как по-чешски «пять»?",o:["čtyři","sest","pet","tri"],c:2,ok:"Правильно! pet = пять",no:"Нет. Пять = pet [пэть]"},
+  {q:"Что значит «dvacet»?",o:["двенадцать","двое","двадцать","два"],c:2,ok:"Верно! dvacet = двадцать",no:"Нет. dvacet = двадцать"}
+ ]
+},
+{id:3,title:"Privetstvie",icon:"👋",level:"A1",ru_title:"Приветствие",
+ words:[
+  {cz:"Dobrý den",ru:"Добрый день",ph:"[до́бри дэн]",ic:"☀️"},
+  {cz:"Ahoj",ru:"Привет",ph:"[аhой]",ic:"👋"},
+  {cz:"Jak se jmenujete?",ru:"Как вас зовут?",ph:"[як сэ ймэну́ете?]",ic:"❓"},
+  {cz:"Jmenuji se...",ru:"Меня зовут...",ph:"[ймэну́йи сэ]",ic:"🙋"},
+  {cz:"Těší mě",ru:"Приятно познакомиться",ph:"[тэ́ши мнэ]",ic:"🤝"},
+  {cz:"Na shledanou",ru:"До свидания",ph:"[на схледа́ноу]",ic:"👋"},
+  {cz:"Děkuji",ru:"Спасибо",ph:"[дэ́куйи]",ic:"🙏"},
+  {cz:"Prosím",ru:"Пожалуйста",ph:"[про́сим]",ic:"😊"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Dobrý den! Jak se jmenujete?",ph:"[до́бри дэн! як сэ ймэну́ете?]",r:"Добрый день! Как вас зовут?"},
+  {w:"S",n:"Svetlana",t:"Dobrý den! Jmenuji se Svetlana.",ph:"[до́бри дэн! ймэну́йи сэ Свэ́тлана]",r:"Добрый день! Меня зовут Светлана."},
+  {w:"L",n:"Lucie",t:"Těší mě, Svetlano! Odkud jste?",ph:"[тэ́ши мнэ! о́ткуд йстэ?]",r:"Приятно, Светлана! Откуда вы?"},
+  {w:"S",n:"Svetlana",t:"Jsem z Ruska. Bydlím v Praze.",ph:"[йсэм с Ру́ска. бидли́м в Пра́зе]",r:"Я из России. Живу в Праге."},
+  {w:"L",n:"Lucie",t:"Výborně! Na shledanou, Svetlano!",ph:"[ви́борнэ! на схледа́ноу]",r:"Отлично! До свидания, Светлана!"},
+  {w:"S",n:"Svetlana",t:"Na shledanou! Děkuji!",ph:"[на схледа́ноу! дэ́куйи!]",r:"До свидания! Спасибо!"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Dobrý den! Jak se jmenujete?",ph:"",r:"Добрый день! Как вас зовут?"},
+  {w:"O",n:"Olga",t:"Dobrý den! Jmenuji se Olga. A co vy?",ph:"[а цо ви?]",r:"Добрый день! Меня зовут Ольга. А вы?"},
+  {w:"L",n:"Lucie",t:"Těší mě, Olgo! Odkud jste?",ph:"",r:"Приятно, Ольга! Откуда вы?"},
+  {w:"O",n:"Olga",t:"Jsem z Moskvy, ale bydlím v Praze. Mám ráda toto město!",ph:"[мам ра́да то́то мньесто!]",r:"Я из Москвы, живу в Праге. Мне нравится этот город!"}
+ ],
+ ex:[
+  {q:"Лючия: «Jak se jmenujete?» Что отвечаете?",o:["Na shledanou!","Jmenuji se Svetlana.","Dekuji!","Dobry den!"],c:1,ok:"Отлично! Jmenuji se Svetlana — правильный ответ",no:"Нет. На вопрос «как зовут»: Jmenuji se..."},
+  {q:"Как по-чешски «До свидания»?",o:["Ahoj","Dobry den","Na shledanou","Dekuji"],c:2,ok:"Верно! Na shledanou = До свидания",no:"Нет. До свидания = Na shledanou"}
+ ]
+},
+{id:4,title:"V kafe",icon:"☕",level:"A1",ru_title:"В кафе",
+ words:[
+  {cz:"kava",ru:"кофе",ph:"[ка́ва]",ic:"☕"},
+  {cz:"caj",ru:"чай",ph:"[чай]",ic:"🍵"},
+  {cz:"voda",ru:"вода",ph:"[во́да]",ic:"💧"},
+  {cz:"pivo",ru:"пиво",ph:"[пи́во]",ic:"🍺"},
+  {cz:"Prosím jednu kavu",ru:"Один кофе, пожалуйста",ph:"[про́сим е́дну ка́ву]",ic:"🙋"},
+  {cz:"Kolik to stoji?",ru:"Сколько стоит?",ph:"[ко́лик то стойи́?]",ic:"💰"},
+  {cz:"Ucet, prosim",ru:"Счёт, пожалуйста",ph:"[у́чет, про́сим]",ic:"🧾"},
+  {cz:"S mlekem",ru:"С молоком",ph:"[с мле́кем]",ic:"🥛"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Dobrý den! Co si dáte?",ph:"[цо си да́те?]",r:"Добрый день! Что будете?"},
+  {w:"S",n:"Svetlana",t:"Prosím jednu kavu.",ph:"[про́сим е́дну ка́ву]",r:"Пожалуйста, один кофе."},
+  {w:"L",n:"Lucie",t:"S mlékem nebo bez mléka?",ph:"[с мле́кем не́бо бэс мле́ка?]",r:"С молоком или без?"},
+  {w:"S",n:"Svetlana",t:"S mlékem, prosím.",ph:"[с мле́кем, про́сим]",r:"С молоком, пожалуйста."},
+  {w:"L",n:"Lucie",t:"Dobre. Bude to padesát korun.",ph:"[до́бже. будэ то падэса́т ко́рун]",r:"Хорошо. Будет пятьдесят крон."},
+  {w:"S",n:"Svetlana",t:"Děkuji. Ucet, prosim.",ph:"[дэ́куйи. у́чет, про́сим]",r:"Спасибо. Счёт, пожалуйста."}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Co si dáte?",ph:"",r:"Что будете?"},
+  {w:"O",n:"Olga",t:"Prosím velke cappuccino. Mate bezlepkovy dezert?",ph:"",r:"Большое капучино. Есть безглютеновый десерт?"},
+  {w:"L",n:"Lucie",t:"Bohužel nemáme.",ph:"[боhу́жел нэма́мэ]",r:"К сожалению, нет."},
+  {w:"O",n:"Olga",t:"Nevadí, děkuji.",ph:"[нэва́ди, дэ́куйи]",r:"Ничего, спасибо."}
+ ],
+ ex:[
+  {q:"Как попросить кофе?",o:["Kolik to stoji?","Prosim jednu kavu.","Na shledanou!","Dekuji."],c:1,ok:"Правильно! Prosim jednu kavu = Один кофе, пожалуйста",no:"Нет. Заказываем: Prosim jednu kavu."},
+  {q:"Что значит «Ucet, prosim»?",o:["Ещё кофе","Без молока","Счёт, пожалуйста","Спасибо"],c:2,ok:"Верно! Ucet = счёт",no:"Нет. Ucet prosim = Счёт, пожалуйста"}
+ ]
+},
+{id:5,title:"V magazine",icon:"🛒",level:"A1",ru_title:"В магазине",
+ words:[
+  {cz:"obchod",ru:"магазин",ph:"[о́бход]",ic:"🏪"},
+  {cz:"Kde je...?",ru:"Где находится...?",ph:"[кдэ йэ]",ic:"❓"},
+  {cz:"Chci koupit...",ru:"Хочу купить...",ph:"[хци коу́пит]",ic:"🛍️"},
+  {cz:"chleb",ru:"хлеб",ph:"[хлеб]",ic:"🍞"},
+  {cz:"mleko",ru:"молоко",ph:"[мле́ко]",ic:"🥛"},
+  {cz:"ovoce",ru:"фрукты",ph:"[о́воцэ]",ic:"🍎"},
+  {cz:"Mate...?",ru:"У вас есть...?",ph:"[ма́тэ]",ic:"🤔"},
+  {cz:"levnejsi",ru:"подешевле",ph:"[лэвнэ́йши]",ic:"💸"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Dobrý den! Mohu vám pomoci?",ph:"[мо́ху ваам помо́ци?]",r:"Добрый день! Могу вам помочь?"},
+  {w:"S",n:"Svetlana",t:"Ano, prosím. Kde je chléb?",ph:"[а́но, про́сим. кдэ йэ хлеб?]",r:"Да, пожалуйста. Где хлеб?"},
+  {w:"L",n:"Lucie",t:"Chléb je tam, v druhé uličce.",ph:"[хлеб йэ там, в дру́hэ у́личцэ]",r:"Хлеб там, во второй полке."},
+  {w:"S",n:"Svetlana",t:"Děkuji. A mate cerstvee mleko?",ph:"[а ма́тэ чэ́рстве мле́ко?]",r:"Спасибо. А есть свежее молоко?"},
+  {w:"L",n:"Lucie",t:"Ano, tady je.",ph:"[а́но, та́ди йэ]",r:"Да, вот оно."},
+  {w:"S",n:"Svetlana",t:"Jeden, prosím. Děkuji!",ph:"[е́ден, про́сим]",r:"Один, пожалуйста. Спасибо!"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Mohu vám pomoci?",ph:"",r:"Могу помочь?"},
+  {w:"O",n:"Olga",t:"Hledám něco levnějšího. Máte nějaké akce?",ph:"",r:"Ищу что-нибудь подешевле. Есть акции?"},
+  {w:"L",n:"Lucie",t:"Ano! Dnes máme slevu na jogurty.",ph:"",r:"Да! Сегодня скидка на йогурты."},
+  {w:"O",n:"Olga",t:"Skvěle, vezmu si tři.",ph:"[сквьелэ]",r:"Отлично, возьму три."}
+ ],
+ ex:[
+  {q:"Как спросить «Где хлеб?»",o:["Chci chleb.","Kde je chleb?","Mate chleb?","Kolik stoji?"],c:1,ok:"Верно! Kde je = где находится",no:"Нет. Где? = Kde je...?"},
+  {q:"Что значит «Mate...?»",o:["Хочу...","Где...?","У вас есть...?","Сколько стоит?"],c:2,ok:"Правильно! Mate = у вас есть",no:"Нет. Mate = У вас есть...?"}
+ ]
+},
+{id:6,title:"Transport",icon:"🚌",level:"A1",ru_title:"Транспорт",
+ words:[
+  {cz:"autobus",ru:"автобус",ph:"[а́утобус]",ic:"🚌"},
+  {cz:"metro",ru:"метро",ph:"[мэ́тро]",ic:"🚇"},
+  {cz:"zastávka",ru:"остановка",ph:"[заста́вка]",ic:"🚏"},
+  {cz:"Kde je zastavka?",ru:"Где остановка?",ph:"[кдэ йэ заста́вка?]",ic:"❓"},
+  {cz:"vlevo / vpravo",ru:"налево / направо",ph:"[вле́во / впра́во]",ic:"↔️"},
+  {cz:"rovně",ru:"прямо",ph:"[ро́внэ]",ic:"⬆️"},
+  {cz:"blízko / daleko",ru:"близко / далеко",ph:"[бли́зко / да́лэко]",ic:"📍"},
+  {cz:"Jak se dostanu...?",ru:"Как добраться до...?",ph:"[як сэ доста́ну]",ic:"🗺️"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Promiňte, jak se dostanu na namesti?",ph:"[проминьтэ, як сэ доста́ну?]",r:"Извините, как добраться до площади?"},
+  {w:"S",n:"Svetlana",t:"Jděte rovně a pak vlevo.",ph:"[йдьетэ ро́внэ а пак вле́во]",r:"Идите прямо и потом налево."},
+  {w:"L",n:"Lucie",t:"Je to daleko?",ph:"[йэ то да́лэко?]",r:"Это далеко?"},
+  {w:"S",n:"Svetlana",t:"Ne, je to blízko. Pět minut pěšky.",ph:"[нэ, йэ то бли́зко. пэть мину́т пьешки]",r:"Нет, это близко. Пять минут пешком."},
+  {w:"L",n:"Lucie",t:"Děkuji moc!",ph:"[дэ́куйи моц!]",r:"Большое спасибо!"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Jak se dostanu na letiště?",ph:"",r:"Как добраться до аэропорта?"},
+  {w:"O",n:"Olga",t:"Autobusem číslo 119 od Nádraží Veleslavín. Asi dvacet minut.",ph:"",r:"Автобусом 119 от станции Велеславин. Около двадцати минут."}
+ ],
+ ex:[
+  {q:"Как сказать «прямо»?",o:["vlevo","vpravo","rovne","blizko"],c:2,ok:"Верно! rovne = прямо",no:"Нет. Прямо = rovne [ро́внэ]"},
+  {q:"Что значит «zastavka»?",o:["вокзал","остановка","аэропорт","улица"],c:1,ok:"Правильно! zastavka = остановка",no:"Нет. zastavka = остановка"}
+ ]
+},
+{id:7,title:"Semya",icon:"👪",level:"A1",ru_title:"Семья",
+ words:[
+  {cz:"matka / mama",ru:"мать / мама",ph:"[ма́тка / ма́ма]",ic:"👩"},
+  {cz:"otec / tata",ru:"отец / папа",ph:"[о́тец / та́та]",ic:"👨"},
+  {cz:"manzel / manzelka",ru:"муж / жена",ph:"[ма́ньжел / ма́ньжелка]",ic:"💑"},
+  {cz:"syn / dcera",ru:"сын / дочь",ph:"[сын / дцэ́ра]",ic:"👦👧"},
+  {cz:"šestra / bratr",ru:"сестра / брат",ph:"[сэ́стра / бра́тр]",ic:"👫"},
+  {cz:"babicka / dedecek",ru:"бабушка / дедушка",ph:"[ба́бичка / дьедэ́чек]",ic:"👵👴"},
+  {cz:"rodina",ru:"семья",ph:"[ро́дина]",ic:"👨‍👩‍👧‍👦"},
+  {cz:"Mam...",ru:"У меня есть...",ph:"[маам]",ic:"❤️"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Máte rodinu, Světlano?",ph:"[ма́тэ ро́дину?]",r:"У вас есть семья, Светлана?"},
+  {w:"S",n:"Svetlana",t:"Ano, mám manžela a dvě dcery.",ph:"[а́но, маам ма́ньжела а двэ дцэ́ри]",r:"Да, у меня есть муж и две дочери."},
+  {w:"L",n:"Lucie",t:"A máte vnoučata?",ph:"[а ма́тэ вноу́чата?]",r:"А у вас есть внуки?"},
+  {w:"S",n:"Svetlana",t:"Ano! Mám tři vnuky. Jsou roztomilí!",ph:"[маам тши вну́ки. йсоу розтоми́ли!]",r:"Да! У меня три внука. Они очаровательные!"},
+  {w:"L",n:"Lucie",t:"To je krásné! Rodina je nejdůležitější.",ph:"[ро́дина йэ нэйдуулежи́тэйши]",r:"Как прекрасно! Семья — самое важное."}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Jak velká je vaše rodina?",ph:"",r:"Какая у вас большая семья?"},
+  {w:"O",n:"Olga",t:"Jsme velká rodina. Mám rodiče, bratra a dvě neteře.",ph:"",r:"Мы большая семья. Есть родители, брат и две племянницы."}
+ ],
+ ex:[
+  {q:"Как по-чешски «бабушка»?",o:["matka","sestra","babicka","dcera"],c:2,ok:"Верно! babicka = бабушка",no:"Нет. Бабушка = babicka"},
+  {q:"Что значит «Mam manzela»?",o:["Есть сестра","Есть муж","Я замужем","Люблю мужа"],c:1,ok:"Правильно! Mam manzela = У меня есть муж",no:"Нет. Mam manzela = У меня есть муж"}
+ ]
+},
+{id:8,title:"Dom i kvartira",icon:"🏠",level:"A1",ru_title:"Дом и квартира",
+ words:[
+  {cz:"byt / dum",ru:"квартира / дом",ph:"[бит / дуум]",ic:"🏠"},
+  {cz:"pokoj",ru:"комната",ph:"[по́кой]",ic:"🛋️"},
+  {cz:"kuchyň",ru:"кухня",ph:"[ку́хинь]",ic:"🍳"},
+  {cz:"koupelna",ru:"ванная",ph:"[коу́пелна]",ic:"🛁"},
+  {cz:"okno / dvere",ru:"окно / дверь",ph:"[о́кно / двэ́же]",ic:"🪟"},
+  {cz:"stul / zidle",ru:"стол / стул",ph:"[стуул / жи́длэ]",ic:"🪑"},
+  {cz:"Bydlim v...",ru:"Я живу в...",ph:"[бидли́м в]",ic:"📍"},
+  {cz:"nájem",ru:"аренда",ph:"[на́йем]",ic:"💵"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Kde bydlíte, Světlano?",ph:"[кдэ бидли́тэ?]",r:"Где вы живёте, Светлана?"},
+  {w:"S",n:"Svetlana",t:"Bydlím v Praze, v bytě na Žižkově.",ph:"[бидли́м в Пра́зэ, в би́тэ на Жи́жковэ]",r:"Живу в Праге, в квартире на Жижкове."},
+  {w:"L",n:"Lucie",t:"Jak velký je váš byt?",ph:"[як вэ́лки йэ ваш бит?]",r:"Какая у вас квартира?"},
+  {w:"S",n:"Svetlana",t:"Mám dvoupokojový byt. Je útulný.",ph:"[маам двоупокойови́ бит. йэ у́тулни]",r:"У меня двухкомнатная квартира. Уютная."},
+  {w:"L",n:"Lucie",t:"To zní hezky!",ph:"[то зни́ hэзки!]",r:"Звучит хорошо!"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Jak se vám líbí váš byt?",ph:"",r:"Как вам нравится ваша квартира?"},
+  {w:"O",n:"Olga",t:"Velmi se mi líbí! Máme velkou kuchyň a krásný výhled na park.",ph:"",r:"Очень нравится! Большая кухня и вид на парк."}
+ ],
+ ex:[
+  {q:"Как по-чешски «кухня»?",o:["pokoj","koupelna","kuchyn","okno"],c:2,ok:"Правильно! kuchyn = кухня",no:"Нет. Кухня = kuchyn"},
+  {q:"Что значит «byt»?",o:["дом","квартира","комната","улица"],c:1,ok:"Верно! byt = квартира",no:"Нет. byt = квартира"}
+ ]
+},
+{id:9,title:"Eda i napitki",icon:"🍽️",level:"A1",ru_title:"Еда и напитки",
+ words:[
+  {cz:"snídaně / obed",ru:"завтрак / обед",ph:"[сни́данэ / о́бед]",ic:"🌅"},
+  {cz:"večeře",ru:"ужин",ph:"[вэ́чэже]",ic:"🌙"},
+  {cz:"chleb / rohlik",ru:"хлеб / рогалик",ph:"[хлеб / ро́hлик]",ic:"🍞"},
+  {cz:"maso / kuřecí",ru:"мясо / куриное",ph:"[ма́со / ку́жэци]",ic:"🍗"},
+  {cz:"zelenina",ru:"овощи",ph:"[зэлэни́на]",ic:"🥗"},
+  {cz:"polévka",ru:"суп",ph:"[по́левка]",ic:"🍲"},
+  {cz:"Mam hlad.",ru:"Я голодна.",ph:"[маам hлад]",ic:"😋"},
+  {cz:"Je to chutne!",ru:"Это вкусно!",ph:"[йэ то хутнэ́!]",ic:"😍"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Co jíte ráno, Světlano?",ph:"[цо йи́тэ ра́но?]",r:"Что вы едите утром, Светлана?"},
+  {w:"S",n:"Svetlana",t:"Ráno jím chléb s máslem a piji čaj.",ph:"[ра́но йим хлеб с ма́слем]",r:"Утром ем хлеб с маслом и пью чай."},
+  {w:"L",n:"Lucie",t:"A co máte ráda k obědu?",ph:"[а цо ма́тэ ра́да к о́беду?]",r:"А что вы любите на обед?"},
+  {w:"S",n:"Svetlana",t:"Mam rada polevku a kuřecí maso.",ph:"[маам ра́да по́левку а ку́жэци ма́со]",r:"Люблю суп и куриное мясо."},
+  {w:"L",n:"Lucie",t:"Výborně! Je to zdrave.",ph:"[ви́борнэ! йэ то здра́вэ]",r:"Отлично! Это полезно."}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Umíte vařit české jídlo?",ph:"",r:"Умеете готовить чешскую еду?"},
+  {w:"O",n:"Olga",t:"Trochu ano! Naučila jsem se dělat svíčkovou a knedlíky.",ph:"",r:"Немного да! Научилась делать свичкову и кнедлики."}
+ ],
+ ex:[
+  {q:"Как сказать «Я голодна»?",o:["Jsem unavena.","Mam hlad.","Je to chutne!","Mam zizen."],c:1,ok:"Верно! Mam hlad = Я голодна",no:"Нет. Я голодна = Mam hlad"},
+  {q:"Что значит «polevka»?",o:["салат","мясо","суп","хлеб"],c:2,ok:"Правильно! polevka = суп",no:"Нет. polevka = суп"}
+ ]
+},
+{id:10,title:"Dni nedeli i vremya",icon:"📅",level:"A1",ru_title:"Дни недели и время",
+ words:[
+  {cz:"pondělí / utery",ru:"понедельник / вторник",ph:"[по́ндэли / у́тери]",ic:"📅"},
+  {cz:"středa / ctvrtek",ru:"среда / четверг",ph:"[стшэ́да / чтвртэк]",ic:"📅"},
+  {cz:"pátek / sobota / nedele",ru:"пятница / суббота / воскр.",ph:"[па́тэк / со́бота / нэдьелэ]",ic:"📅"},
+  {cz:"rano / vecer",ru:"утро / вечер",ph:"[ра́но / вэ́чэр]",ic:"🌅"},
+  {cz:"Kolik je hodin?",ru:"Который час?",ph:"[ко́лик йэ hо́дин?]",ic:"🕐"},
+  {cz:"dnes / zitra / vcera",ru:"сегодня / завтра / вчера",ph:"[днэс / зи́тра / вчэ́ра]",ic:"📆"},
+  {cz:"tyden",ru:"неделя",ph:"[ти́ден]",ic:"🗓️"},
+  {cz:"mesic",ru:"месяц",ph:"[мнэ́сиц]",ic:"🗓️"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Jaký je dnes den?",ph:"[яки́ йэ днэс ден?]",r:"Какой сегодня день?"},
+  {w:"S",n:"Svetlana",t:"Dnes je pondělí.",ph:"[днэс йэ по́ндэли]",r:"Сегодня понедельник."},
+  {w:"L",n:"Lucie",t:"A kolik je hodin?",ph:"[а ко́лик йэ hо́дин?]",r:"А который час?"},
+  {w:"S",n:"Svetlana",t:"Je deset hodin ráno.",ph:"[йэ дэ́сет hо́дин ра́но]",r:"Десять часов утра."},
+  {w:"L",n:"Lucie",t:"Dobře. Uvidíme se zítra!",ph:"[до́бже. увиди́мэ сэ зи́тра]",r:"Хорошо. Увидимся завтра!"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Kdy máte čas na lekci?",ph:"",r:"Когда у вас есть время на урок?"},
+  {w:"O",n:"Olga",t:"Ve středu odpoledne nebo v pátek ráno.",ph:"",r:"В среду после обеда или в пятницу утром."}
+ ],
+ ex:[
+  {q:"Как по-чешски «завтра»?",o:["vcera","dnes","zitra","rano"],c:2,ok:"Верно! zitra = завтра",no:"Нет. Завтра = zitra"},
+  {q:"Что значит «pondeli»?",o:["пятница","воскресенье","суббота","понедельник"],c:3,ok:"Правильно! pondeli = понедельник",no:"Нет. pondeli = понедельник"}
+ ]
+},
+{id:11,title:"Pogoda",icon:"🌤️",level:"A2",ru_title:"Погода",
+ words:[
+  {cz:"Prší.",ru:"Идёт дождь.",ph:"[пр́ши]",ic:"🌧️"},
+  {cz:"Sněží.",ru:"Идёт снег.",ph:"[снэ́жи]",ic:"❄️"},
+  {cz:"Sviti slunce.",ru:"Светит солнце.",ph:"[сви́ти слу́нцэ]",ic:"☀️"},
+  {cz:"Je teplo.",ru:"Тепло.",ph:"[йэ тэ́пло]",ic:"🌡️"},
+  {cz:"Je chladno.",ru:"Холодно.",ph:"[йэ хла́дно]",ic:"🥶"},
+  {cz:"zima / leto",ru:"зима / лето",ph:"[зи́ма / ле́то]",ic:"❄️☀️"},
+  {cz:"Jake je pocasi?",ru:"Какая погода?",ph:"[яке́ йэ по́часи?]",ic:"☁️"},
+  {cz:"krasne / hrozne",ru:"прекрасно / ужасно",ph:"[кра́снэ / hро́знэ]",ic:"😊😱"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Jaké je dnes počasí, Světlano?",ph:"[яке́ йэ днэс по́часи?]",r:"Какая сегодня погода, Светлана?"},
+  {w:"S",n:"Svetlana",t:"Dnes prší. Je chladno.",ph:"[днэс пр́ши. йэ хла́дно]",r:"Сегодня дождь. Холодно."},
+  {w:"L",n:"Lucie",t:"To je škoda. Máte deštník?",ph:"[то йэ шко́да]",r:"Жалко. У вас есть зонтик?"},
+  {w:"S",n:"Svetlana",t:"Ano, mám. Ale mám ráda déšť.",ph:"[маам ра́да де́шть]",r:"Да, есть. Но я люблю дождь."},
+  {w:"L",n:"Lucie",t:"Já mám raději slunce.",ph:"[яа маам ра́дейи слу́нцэ]",r:"Я предпочитаю солнце."}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Jaké roční období máte nejraději?",ph:"",r:"Какое время года любите больше всего?"},
+  {w:"O",n:"Olga",t:"Nejraději mám jaro. Stromy kvetou a je příjemně teplo.",ph:"",r:"Больше всего люблю весну. Деревья цветут и тепло."}
+ ],
+ ex:[
+  {q:"Как сказать «Идёт дождь»?",o:["Snezi.","Sviti slunce.","Prsi.","Je teplo."],c:2,ok:"Верно! Prsi = Идёт дождь",no:"Нет. Идёт дождь = Prsi"},
+  {q:"Что значит «Je teplo»?",o:["Холодно","Ветрено","Тепло","Идёт снег"],c:2,ok:"Правильно! Je teplo = Тепло",no:"Нет. Je teplo = Тепло"}
+ ]
+},
+{id:12,title:"Zdorovye",icon:"❤️",level:"A2",ru_title:"Здоровье",
+ words:[
+  {cz:"Boli me hlava.",ru:"Болит голова.",ph:"[боли́ мнэ hла́ва]",ic:"🤕"},
+  {cz:"Jsem nemocna.",ru:"Я больна.",ph:"[йсэм нэмо́цна]",ic:"🤒"},
+  {cz:"Jsem unavena.",ru:"Я устала.",ph:"[йсэм унавэ́на]",ic:"😴"},
+  {cz:"lékař / doktor",ru:"врач / доктор",ph:"[ле́каш / до́ктор]",ic:"👨‍⚕️"},
+  {cz:"lékárna",ru:"аптека",ph:"[лека́рна]",ic:"💊"},
+  {cz:"léky / tablety",ru:"лекарства / таблетки",ph:"[ле́ки / та́блети]",ic:"💊"},
+  {cz:"Jak se citite?",ru:"Как вы себя чувствуете?",ph:"[як сэ ци́титэ?]",ic:"🩺"},
+  {cz:"Citim se lepe.",ru:"Чувствую себя лучше.",ph:"[ци́тим сэ ле́пэ]",ic:"😊"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Jak se cítíte dnes, Světlano?",ph:"[як сэ ци́титэ днэс?]",r:"Как вы себя чувствуете сегодня?"},
+  {w:"S",n:"Svetlana",t:"Bohužel mi není dobře. Bolí mě hlava.",ph:"[боhу́жел ми нэни до́бже]",r:"К сожалению, мне нехорошо. Болит голова."},
+  {w:"L",n:"Lucie",t:"To je škoda. Měla byste odpočívat.",ph:"[мнела бистэ отпочи́ват]",r:"Жалко. Вам нужно отдохнуть."},
+  {w:"S",n:"Svetlana",t:"Ano, půjdu do lékárny.",ph:"[а́но, пуйду до лека́рни]",r:"Да, схожу в аптеку."},
+  {w:"L",n:"Lucie",t:"Dobrý nápad. Uzdravte se!",ph:"[уздра́втэ сэ!]",r:"Хорошая идея. Выздоравливайте!"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Chodíte pravidelně k lékaři?",ph:"",r:"Вы регулярно ходите к врачу?"},
+  {w:"O",n:"Olga",t:"Ano, každý rok na preventivní prohlídku. Zdraví je nejdůležitější!",ph:"",r:"Да, каждый год на профосмотр. Здоровье — самое важное!"}
+ ],
+ ex:[
+  {q:"Как сказать «У меня болит голова»?",o:["Jsem unavena.","Boli me hlava.","Jsem nemocna.","Citim se lepe."],c:1,ok:"Верно! Boli me hlava = болит голова",no:"Нет. Болит голова = Boli me hlava"},
+  {q:"Что значит «lekarna»?",o:["больница","врач","аптека","таблетки"],c:2,ok:"Правильно! lekarna = аптека",no:"Нет. lekarna = аптека"}
+ ]
+},
+{id:13,title:"Harakter i vneshnost",icon:"🪞",level:"A2",ru_title:"Характер и внешность",
+ words:[
+  {cz:"hezky / hezka",ru:"красивый / красивая",ph:"[hэ́зки / hэ́зка]",ic:"😍"},
+  {cz:"vysoky / nizky",ru:"высокий / низкий",ph:"[висо́ки / ни́зки]",ic:"📏"},
+  {cz:"mlady / stary",ru:"молодой / старый",ph:"[мла́ди / ста́ри]",ic:"👶👴"},
+  {cz:"hodny / zly",ru:"добрый / злой",ph:"[hо́дни / зли]",ic:"😊😠"},
+  {cz:"vesely / smutny",ru:"весёлый / грустный",ph:"[вэ́сэли / смутни́]",ic:"😄😢"},
+  {cz:"chytry / moudry",ru:"умный / мудрый",ph:"[хи́три / мо́удри]",ic:"🧠"},
+  {cz:"Vypada...",ru:"Он/она выглядит...",ph:"[випада́]",ic:"👀"},
+  {cz:"Zda se, ze...",ru:"Кажется, что...",ph:"[зда́ сэ жэ]",ic:"🤔"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Jak vypadá vaše sousedka?",ph:"[як випада́ вашэ со́усэдка?]",r:"Как выглядит ваша соседка?"},
+  {w:"S",n:"Svetlana",t:"Je vysoká a má tmavé vlasy.",ph:"[йэ висо́ка а ма тма́вэ вла́си]",r:"Она высокая, с тёмными волосами."},
+  {w:"L",n:"Lucie",t:"A jaká je povahově?",ph:"[а яка́ йэ по́ваhовэ?]",r:"А какой она характер?"},
+  {w:"S",n:"Svetlana",t:"Je velmi hodná a veselá. Vždy se směje.",ph:"[йэ вельми hо́дна а вэ́сэла]",r:"Она очень добрая и весёлая."},
+  {w:"L",n:"Lucie",t:"To zní příjemně!",ph:"[то зни́ пши́йемнэ]",r:"Звучит приятно!"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Jak byste popsala svého manžela?",ph:"",r:"Как вы описали бы своего мужа?"},
+  {w:"O",n:"Olga",t:"Je klidny a trpělivý. Nikdy se hneva. Je to jeho nejvetsi prednost.",ph:"",r:"Он спокойный и терпеливый. Никогда не злится. Это его главное достоинство."}
+ ],
+ ex:[
+  {q:"Как по-чешски «добрый»?",o:["zly","chytry","hodny","vesely"],c:2,ok:"Верно! hodny = добрый",no:"Нет. Добрый = hodny"},
+  {q:"Что значит «vesely»?",o:["грустный","сердитый","весёлый","умный"],c:2,ok:"Правильно! vesely = весёлый",no:"Нет. vesely = весёлый"}
+ ]
+},
+{id:14,title:"Vzaimootnosheniya",icon:"🤝",level:"A2",ru_title:"Взаимоотношения",
+ words:[
+  {cz:"pritel / pritelkyne",ru:"друг / подруга",ph:"[пши́тел / пши́телкинэ]",ic:"👫"},
+  {cz:"soused / sousedka",ru:"сосед / соседка",ph:"[со́усэд / со́усэдка]",ic:"🏘️"},
+  {cz:"kolega",ru:"коллега",ph:"[ко́лэга]",ic:"👔"},
+  {cz:"Mam ji rada.",ru:"Она мне нравится.",ph:"[маам йи ра́да]",ic:"❤️"},
+  {cz:"Vychazime dobre.",ru:"Мы хорошо ладим.",ph:"[вихази́мэ до́бже]",ic:"🤝"},
+  {cz:"Pomahame si.",ru:"Мы помогаем друг другу.",ph:"[пома́hамэ си]",ic:"🙌"},
+  {cz:"Duveryji ji.",ru:"Я доверяю ей.",ph:"[ду́вэжуйи йи]",ic:"🔐"},
+  {cz:"Jsme dobri sousede.",ru:"Мы хорошие соседи.",ph:"[йсмэ до́бжи со́усэдэ]",ic:"🏠"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Máte tady přátele, Světlano?",ph:"[ма́тэ та́ди пша́тэлэ?]",r:"У вас есть здесь друзья, Светлана?"},
+  {w:"S",n:"Svetlana",t:"Ano, mám dobrou sousedku Janu.",ph:"[маам до́броу со́усэдку. ймэнуйэ сэ Я́на]",r:"Да, у меня есть хорошая соседка Яна."},
+  {w:"L",n:"Lucie",t:"Vycházíte spolu dobře?",ph:"[вихази́тэ спо́лу до́бже?]",r:"Вы хорошо ладите?"},
+  {w:"S",n:"Svetlana",t:"Ano! Mám ji moc ráda. Pomáháme si.",ph:"[маам йи моц ра́да. помаhамэ си]",r:"Да! Она мне очень нравится. Помогаем друг другу."},
+  {w:"L",n:"Lucie",t:"Dobří sousedé jsou poklad!",ph:"[до́бжи со́усэдэ йсоу по́клад]",r:"Хорошие соседи — это сокровище!"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Jak důležitá jsou pro vás přátelství?",ph:"",r:"Насколько важна для вас дружба?"},
+  {w:"O",n:"Olga",t:"Velmi! Mám málo přátel, ale jsou to lidé, kterým zcela důvěřuji.",ph:"",r:"Очень! Мало друзей, но это люди, которым полностью доверяю."}
+ ],
+ ex:[
+  {q:"Как сказать «Она мне нравится»?",o:["Duveryji ji.","Pomahame si.","Mam ji rada.","Vychazime dobre."],c:2,ok:"Верно! Mam ji rada = Она мне нравится",no:"Нет. Она мне нравится = Mam ji rada"},
+  {q:"Что значит «soused»?",o:["коллега","друг","сосед","родственник"],c:2,ok:"Правильно! soused = сосед",no:"Нет. soused = сосед"}
+ ]
+},
+{id:15,title:"Horoshee povedenie",icon:"😇",level:"A2",ru_title:"Хорошее поведение",
+ words:[
+  {cz:"laskavý",ru:"добросердечный",ph:"[ла́скави]",ic:"💗"},
+  {cz:"slušný",ru:"вежливый",ph:"[слу́шни]",ic:"🎩"},
+  {cz:"upřímný",ru:"искренний",ph:"[у́пжимни]",ic:"💎"},
+  {cz:"trpělivý",ru:"терпеливый",ph:"[трпьели́ви]",ic:"⏳"},
+  {cz:"ochotny",ru:"готовый помочь",ph:"[охо́тни]",ic:"🙋"},
+  {cz:"spolehlivý",ru:"надёжный",ph:"[спо́лэhливи]",ic:"🔒"},
+  {cz:"skromný",ru:"скромный",ph:"[скро́мни]",ic:"🌸"},
+  {cz:"Je velmi slušný.",ru:"Он очень воспитанный.",ph:"[йэ вельми слу́шни]",ic:"👍"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Co si myslíte o svém sousedovi?",ph:"[цо си мисли́тэ о свем со́усэдови?]",r:"Что вы думаете о своём соседе?"},
+  {w:"S",n:"Svetlana",t:"Je velmi laskavý a slušný. Vzdy pozdavi.",ph:"[йэ вельми ла́скави а слу́шни]",r:"Он очень добросердечный и вежливый."},
+  {w:"L",n:"Lucie",t:"To je příjemné. Takových lidí je málo.",ph:"[та́ковиh лиди йэ ма́ло]",r:"Это приятно. Таких людей мало."},
+  {w:"S",n:"Svetlana",t:"Je take spolehlivý a upřímný.",ph:"[йэ та́кэ спо́лэhливи]",r:"Он также надёжный и искренний."},
+  {w:"L",n:"Lucie",t:"Jak se jmenuje? Chci ho poznat!",ph:"[хци hо позна́т!]",r:"Как его зовут? Хочу познакомиться!"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Jaké vlastnosti si nejvíce ceníte?",ph:"",r:"Какие качества вы больше всего цените?"},
+  {w:"O",n:"Olga",t:"Upřímnost a spolehlivost. Člověk, který dodrží slovo, je pro mě velmi cenný.",ph:"",r:"Искренность и надёжность. Человек, который держит слово — очень ценен."}
+ ],
+ ex:[
+  {q:"Как по-чешски «надёжный»?",o:["laskavý","trpělivý","spolehlivý","slušný"],c:2,ok:"Верно! spolehlivý = надёжный",no:"Нет. Надёжный = spolehlivý"},
+  {q:"Что значит «upřímný»?",o:["вежливый","искренний","терпеливый","скромный"],c:1,ok:"Правильно! upřímný = искренний",no:"Нет. upřímný = искренний"}
+ ]
+},
+{id:16,title:"Plohoe povedenie",icon:"😤",level:"A2",ru_title:"Плохое поведение",
+ words:[
+  {cz:"hrubý",ru:"грубый",ph:"[hру́би]",ic:"😠"},
+  {cz:"sobecký",ru:"эгоистичный",ph:"[со́бецки]",ic:"🙈"},
+  {cz:"zavistive",ru:"завистливый",ph:"[за́вистиви]",ic:"😒"},
+  {cz:"nepoctivy",ru:"нечестный",ph:"[нэпо́цтиви]",ic:"🤥"},
+  {cz:"drzý",ru:"наглый",ph:"[дрзи́]",ic:"😤"},
+  {cz:"Je mi to neprijemne.",ru:"Это мне неприятно.",ph:"[йэ ми то нэпши́йемнэ]",ic:"😕"},
+  {cz:"To se nedela.",ru:"Так не делается.",ph:"[то сэ нэдэ́ла]",ic:"🚫"},
+  {cz:"Vadi mi to.",ru:"Мне это мешает.",ph:"[ва́ди ми то]",ic:"😣"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Máte problémy s někým v sousedství?",ph:"[ма́тэ про́блеми с нье́ким?]",r:"У вас есть проблемы с кем-то по соседству?"},
+  {w:"S",n:"Svetlana",t:"Ano, jeden soused je bohuzel hrubý.",ph:"[е́ден со́усэд йэ боhу́жел hру́би]",r:"Да, один сосед, к сожалению, грубый."},
+  {w:"L",n:"Lucie",t:"To je nepříjemné. Co dělá?",ph:"[то йэ нэпши́йемнэ]",r:"Это неприятно. Что он делает?"},
+  {w:"S",n:"Svetlana",t:"Krici a je drzý. Vadi mi to.",ph:"[кши́чи а йэ дрзи́. ва́ди ми то]",r:"Кричит и дерзит. Мне это мешает."},
+  {w:"L",n:"Lucie",t:"Rozumím. Lze mu říct: To se nedělá!",ph:"[то сэ нэдэ́ла!]",r:"Понимаю. Ему можно сказать: Так не делается!"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Jak reagujete, když se někdo chová špatně?",ph:"",r:"Как вы реагируете, когда кто-то ведёт себя плохо?"},
+  {w:"O",n:"Olga",t:"Snažím se zachovat klid a říct mu to slušně. Sobeckost tolerovat neumím.",ph:"",r:"Стараюсь сохранять спокойствие и сказать вежливо. Эгоизм терпеть не могу."}
+ ],
+ ex:[
+  {q:"Как сказать «Мне это мешает»?",o:["To se nedela.","Vadi mi to.","Je mi to neprijemne.","Souhlasim."],c:1,ok:"Верно! Vadi mi to = Мне это мешает",no:"Нет. Мне мешает = Vadi mi to"},
+  {q:"Что значит «sobecký»?",o:["грубый","завистливый","эгоистичный","наглый"],c:2,ok:"Правильно! sobecký = эгоистичный",no:"Нет. sobecký = эгоистичный"}
+ ]
+},
+{id:17,title:"Emocii i chuvstva",icon:"💝",level:"A2",ru_title:"Эмоции и чувства",
+ words:[
+  {cz:"Jsem šťastná.",ru:"Я счастлива.",ph:"[йсэм штьа́стна]",ic:"😊"},
+  {cz:"Jsem smutná.",ru:"Я грустная.",ph:"[йсэм смутна́]",ic:"😢"},
+  {cz:"Jsem naštvaná.",ru:"Я сердита.",ph:"[йсэм наштвана́]",ic:"😠"},
+  {cz:"Styska se mi po...",ru:"Я скучаю по...",ph:"[сти́ска сэ ми по]",ic:"💔"},
+  {cz:"Těší mě to.",ru:"Это меня радует.",ph:"[тэ́ши мнэ то]",ic:"🌟"},
+  {cz:"Bojim se.",ru:"Я боюсь.",ph:"[бойи́м сэ]",ic:"😨"},
+  {cz:"Jsem překvapená.",ru:"Я удивлена.",ph:"[йсэм пшэквапэна́]",ic:"😲"},
+  {cz:"Citim se skvele!",ru:"Чувствую себя отлично!",ph:"[ци́тим сэ сквьелэ]",ic:"🌈"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Jak se dnes cítíte, Světlano?",ph:"[як сэ днэс ци́титэ?]",r:"Как вы себя чувствуете сегодня?"},
+  {w:"S",n:"Svetlana",t:"Jsem trochu smutná. Styska se mi po rodine.",ph:"[йсэм тро́ху смутна́. сти́ска сэ ми по ро́динэ]",r:"Я немного грустная. Скучаю по семье."},
+  {w:"L",n:"Lucie",t:"To chápu. Je těžké být daleko od rodiny.",ph:"[то ха́пу. йэ тэ́жкэ бит далэко]",r:"Понимаю. Тяжело быть далеко от семьи."},
+  {w:"S",n:"Svetlana",t:"Ale tady mám nové přátele a líbí se mi Praha.",ph:"[алэ та́ди маам но́вэ пша́тэлэ]",r:"Но здесь у меня новые друзья и мне нравится Прага."},
+  {w:"L",n:"Lucie",t:"Výborně! Pozitivni pristup je velmi dulezity.",ph:"[позити́вни пши́ступ]",r:"Отлично! Позитивный настрой очень важен."}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Co vás nejvíce těší v každodenním životě?",ph:"",r:"Что вас больше всего радует в жизни?"},
+  {w:"O",n:"Olga",t:"Ranní káva, procházka v parku a večerní telefon s dcerou.",ph:"",r:"Утренний кофе, прогулка в парке и звонок дочери."}
+ ],
+ ex:[
+  {q:"Как сказать «Я счастлива»?",o:["Jsem smutná.","Jsem naštvaná.","Jsem šťastná.","Bojim se."],c:2,ok:"Верно! Jsem šťastná = Я счастлива",no:"Нет. Я счастлива = Jsem šťastná"},
+  {q:"Что значит «Styska se mi po rodine»?",o:["Горжусь семьёй","Скучаю по семье","Есть семья","Думаю о семье"],c:1,ok:"Правильно! Styska se mi = я скучаю",no:"Нет. Styska se mi po = Я скучаю по..."}
+ ]
+},
+{id:18,title:"Konflikt i primirenie",icon:"🕊️",level:"A2",ru_title:"Конфликт и примирение",
+ words:[
+  {cz:"Promiňte.",ru:"Извините.",ph:"[про́миньтэ]",ic:"🙏"},
+  {cz:"Omlouvám se.",ru:"Прошу прощения.",ph:"[омлоу́ваам сэ. нэби́ло то в по́жааадку]",ic:"😔"},
+  {cz:"Mrzi me to.",ru:"Мне жаль.",ph:"[мрзи́ мнэ то]",ic:"💙"},
+  {cz:"Nebylo to v poradku.",ru:"Это было нехорошо.",ph:"[нэби́ло то в по́жаадку]",ic:"❌"},
+  {cz:"Rozumim vam.",ru:"Я вас понимаю.",ph:"[ро́зумим ваам]",ic:"👂"},
+  {cz:"Odpustite mi?",ru:"Вы меня простите?",ph:"[отпусти́тэ ми?]",ic:"❤️"},
+  {cz:"Usmiriime se.",ru:"Мы помиримся.",ph:"[усми́жимэ сэ]",ic:"🤝"},
+  {cz:"Je to za nami.",ru:"Это позади.",ph:"[йэ то за на́ми. йсмэ за́сэ до́брэ!]",ic:"✅"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Co se stalo s vaší sousedkou, Světlano?",ph:"[цо сэ ста́ло?]",r:"Что случилось с вашей соседкой, Светлана?"},
+  {w:"S",n:"Svetlana",t:"Měly jsme malý spor. Mrzí mě to.",ph:"[мнели йсмэ ма́ли спор. мрзи́ мнэ то]",r:"У нас был маленький спор. Мне жаль."},
+  {w:"L",n:"Lucie",t:"Mluvily jste spolu potom?",ph:"[млуви́ли йстэ спо́лу по́том?]",r:"Вы потом разговаривали?"},
+  {w:"S",n:"Svetlana",t:"Ano. Řekla jsem: Omlouvám se, nebylo to v pořádku.",ph:"[омлоу́ваам сэ. нэби́ло то в по́жааадку]",r:"Да. Я сказала: Прошу прощения, это было нехорошо."},
+  {w:"L",n:"Lucie",t:"A co řekla ona?",ph:"[а цо же́кла о́на?]",r:"И что она сказала?"},
+  {w:"S",n:"Svetlana",t:"Řekla: Je to za námi. Jsme zase dobré!",ph:"[йэ то за на́ми. йсмэ за́сэ до́брэ!]",r:"Сказала: Это позади. Теперь мы снова хорошо!"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Umíte se omluvit jako první?",ph:"",r:"Умеете ли вы извиниться первой?"},
+  {w:"O",n:"Olga",t:"Ano. Zdravý vztah je důležitější než mít pravdu. Omluvit se je projev síly.",ph:"",r:"Да. Здоровые отношения важнее, чем быть правой. Извиниться — признак силы."}
+ ],
+ ex:[
+  {q:"Как сказать «Прошу прощения»?",o:["Mrzi me to.","Omlouvam se.","Prominnte.","Rozumim vam."],c:1,ok:"Верно! Omlouvam se = Прошу прощения",no:"Нет. Прошу прощения = Omlouvam se"},
+  {q:"Что значит «Je to za nami»?",o:["Это впереди","Это рядом","Это позади","Это наше"],c:2,ok:"Правильно! Je to za nami = Это позади",no:"Нет. Je to za nami = Это позади"}
+ ]
+},
+{id:19,title:"Komplimenty i kritika",icon:"🌹",level:"A2",ru_title:"Комплименты и критика",
+ words:[
+  {cz:"Jste velmi mila!",ru:"Вы очень милая!",ph:"[йстэ вельми ми́ла]",ic:"😊"},
+  {cz:"To vam slusi.",ru:"Вам идёт.",ph:"[то ваам слу́ши]",ic:"👗"},
+  {cz:"Mate skvely vkus.",ru:"Отличный вкус.",ph:"[ма́тэ сквьели вкус]",ic:"✨"},
+  {cz:"To nebylo hezke.",ru:"Это было нехорошо.",ph:"[то нэби́ло hэзке́]",ic:"😕"},
+  {cz:"Mohlo by to byt lepší.",ru:"Могло бы быть лучше.",ph:"[мо́hло би то бит лэ́пши]",ic:"💬"},
+  {cz:"Reknu vam to uprimne.",ru:"Скажу откровенно.",ph:"[же́кну ваам то у́пжимнэ]",ic:"💬"},
+  {cz:"Libi se mi, jak...",ru:"Мне нравится, как...",ph:"[ли́би сэ ми, як]",ic:"👍"},
+  {cz:"Příště to bude lepší.",ru:"В следующий раз лучше.",ph:"[пши́штэ то будэ лэ́пши]",ic:"⭐"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Světlano, jak vám jde čeština?",ph:"[як ваам йдэ чэшти́на?]",r:"Светлана, как у вас идёт чешский?"},
+  {w:"S",n:"Svetlana",t:"Myslím, že pomalu, ale učím se každý den.",ph:"[мисли́м жэ по́малу]",r:"Думаю, что медленно, но учусь каждый день."},
+  {w:"L",n:"Lucie",t:"Děláte velké pokroky! Jste velmi pilná.",ph:"[дьела́тэ вэ́лке по́кроки]",r:"Вы делаете большие успехи! Вы очень прилежная."},
+  {w:"S",n:"Svetlana",t:"Děkuji! To je velmi hezke od vas.",ph:"[то йэ вельми hэзке́ од ваас]",r:"Спасибо! Это очень мило с вашей стороны."},
+  {w:"L",n:"Lucie",t:"Jen r je stale trochu tezke. Příště to bude lepší!",ph:"[пши́штэ то будэ лэ́пши!]",r:"Только r ещё трудное. В следующий раз будет лучше!"},
+  {w:"S",n:"Svetlana",t:"Vím, cvičím to každý den!",ph:"[вим, цви́чим то каждиден!]",r:"Знаю, тренирую каждый день!"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Jak přijímáte kritiku?",ph:"",r:"Как вы воспринимаете критику?"},
+  {w:"O",n:"Olga",t:"Konstruktivní kritiku přijímám ráda. Pomáhá mi růst. Hrubá kritika je jiná věc.",ph:"",r:"Конструктивную критику принимаю с удовольствием. Помогает расти. Грубая критика — другое дело."}
+ ],
+ ex:[
+  {q:"Как сделать комплимент «Вам идёт»?",o:["Jste velmi mila!","To vam slusi.","Mate skvely vkus.","Libi se mi to."],c:1,ok:"Верно! To vam slusi = Вам идёт",no:"Нет. Вам идёт = To vam slusi"},
+  {q:"Что значит «Příště to bude lepší»?",o:["Сейчас лучше","В прошлый раз","В следующий раз лучше","Всегда лучше"],c:2,ok:"Правильно! Příště = в следующий раз",no:"Нет. Příště = в следующий раз"}
+ ]
+},
+{id:20,title:"U vracha",icon:"🏥",level:"A2",ru_title:"У врача — подробно",
+ words:[
+  {cz:"Boli me zada.",ru:"Болит спина.",ph:"[боли́ мнэ за́да]",ic:"🦴"},
+  {cz:"Mam teplotu.",ru:"У меня температура.",ph:"[маам тэ́плоту]",ic:"🌡️"},
+  {cz:"Jsem alergická na...",ru:"У меня аллергия на...",ph:"[йсэм алэрги́цка на]",ic:"🤧"},
+  {cz:"Predepiste mi...",ru:"Выпишите мне...",ph:"[пшэдэпиштэ ми]",ic:"📋"},
+  {cz:"recept",ru:"рецепт",ph:"[рэцэпт]",ic:"💊"},
+  {cz:"pojišťovna",ru:"страховая компания",ph:"[пойиштёвна]",ic:"📄"},
+  {cz:"Kdy mohu prijit?",ru:"Когда могу прийти?",ph:"[кди мо́ху пши́йит?]",ic:"📅"},
+  {cz:"Jak dlouho to trva?",ru:"Как долго это продлится?",ph:"[як длоуhо то трва́?]",ic:"⏰"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Dobrý den. Co vas trapi?",ph:"[цо ваас тра́пи?]",r:"Добрый день. Что вас беспокоит?"},
+  {w:"S",n:"Svetlana",t:"Bolí mě záda a mám trochu teplotu.",ph:"[боли́ мнэ за́да а маам тро́ху тэ́плоту]",r:"Болит спина и немного температура."},
+  {w:"L",n:"Lucie",t:"Jak dlouho vás to trápí?",ph:"[як длоуhо ваас то тра́пи?]",r:"Как давно вас это беспокоит?"},
+  {w:"S",n:"Svetlana",t:"Tri dny. Jsem take alergická na penicilin.",ph:"[тши дни. алэрги́цка на пэницили́н]",r:"Три дня. И у меня аллергия на пенициллин."},
+  {w:"L",n:"Lucie",t:"Předepíši vám léky. Máte pojišťovnu?",ph:"[пшэдэпи́шу ваам ле́ки]",r:"Выпишу вам лекарства. У вас есть страховка?"},
+  {w:"S",n:"Svetlana",t:"Ano, tady je karta pojišťovny.",ph:"[а́но, та́ди йэ ка́рта пойиштёвни]",r:"Да, вот карточка страховой."}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Chodíte pravidelně k lékaři?",ph:"",r:"Вы регулярно ходите к врачу?"},
+  {w:"O",n:"Olga",t:"Ano, každý rok na preventivní prohlídku. Registrovala jsem se u českého lékaře hned po příjezdu.",ph:"",r:"Да, каждый год на профосмотр. Зарегистрировалась у чешского врача сразу после приезда."}
+ ],
+ ex:[
+  {q:"Как сказать «У меня температура»?",o:["Boli me hlava.","Mam teplotu.","Jsem unavena.","Boli me zada."],c:1,ok:"Верно! Mam teplotu = У меня температура",no:"Нет. Температура = Mam teplotu"},
+  {q:"Что такое «pojišťovna»?",o:["аптека","больница","страховая компания","рецепт"],c:2,ok:"Правильно! pojišťovna = страховая компания",no:"Нет. pojišťovna = страховая компания"}
+ ]
+},
+{id:21,title:"V apteke",icon:"💊",level:"A2",ru_title:"В аптеке",
+ words:[
+  {cz:"lékárna",ru:"аптека",ph:"[лека́рна]",ic:"💊"},
+  {cz:"recept / bez receptu",ru:"рецепт / без рецепта",ph:"[рэцэпт / бэс рэцэпту]",ic:"📋"},
+  {cz:"bolest hlavy",ru:"головная боль",ph:"[бо́лэст hла́ви]",ic:"🤕"},
+  {cz:"kasel / ryma",ru:"кашель / насморк",ph:"[кашэл / ри́ма]",ic:"🤧"},
+  {cz:"naplast",ru:"пластырь",ph:"[на́пласт]",ic:"🩹"},
+  {cz:"Mate neco na...?",ru:"Есть что-нибудь от...?",ph:"[ма́тэ нье́цо на]",ic:"❓"},
+  {cz:"Kolikrat denně?",ru:"Сколько раз в день?",ph:"[ко́ликраат дэннэ?]",ic:"⏰"},
+  {cz:"Po jidle / pred jidlem",ru:"После еды / до еды",ph:"[по йи́длэ / пшэд йи́длем]",ic:"🍽️"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Dobrý den. Mohu vám pomoci?",ph:"[мо́ху ваам помо́ци?]",r:"Добрый день. Могу вам помочь?"},
+  {w:"S",n:"Svetlana",t:"Máte něco na bolest hlavy? Bez receptu.",ph:"[ма́тэ нье́цо на бо́лэст hла́ви?]",r:"Есть что-нибудь от головной боли? Без рецепта."},
+  {w:"L",n:"Lucie",t:"Ano, máme Paralen nebo Ibuprofen.",ph:"[а́но, ма́мэ Паралэн]",r:"Да, есть Паралэн или Ибупрофен."},
+  {w:"S",n:"Svetlana",t:"Paralen, prosim. Kolikrat denně?",ph:"[Паралэн, про́сим. ко́ликраат дэннэ?]",r:"Паралэн, пожалуйста. Сколько раз в день?"},
+  {w:"L",n:"Lucie",t:"Trikrat denně, po jidle.",ph:"[тши́краат дэннэ, по йи́длэ]",r:"Три раза в день, после еды."},
+  {w:"S",n:"Svetlana",t:"Děkuji moc. Kolik to stoji?",ph:"[дэ́куйи моц]",r:"Большое спасибо. Сколько стоит?"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Byl vám předepsán recept?",ph:"",r:"Вам выписали рецепт?"},
+  {w:"O",n:"Olga",t:"Ano. Upozorňuji, že mám alergii na penicilin, je to poznamenáno v receptu.",ph:"",r:"Да. Предупреждаю, у меня аллергия на пенициллин, это отмечено в рецепте."}
+ ],
+ ex:[
+  {q:"Как спросить «Есть что-нибудь от кашля»?",o:["Mate leky?","Mate neco na kasel?","Kde je lekarna?","Kolik stoji?"],c:1,ok:"Верно! Mate neco na kasel? = Есть что-нибудь от кашля?",no:"Нет. Правильно: Mate neco na kasel?"},
+  {q:"Что значит «po jidle»?",o:["до еды","натощак","после еды","во время еды"],c:2,ok:"Правильно! po jidle = после еды",no:"Нет. po jidle = после еды"}
+ ]
+},
+{id:22,title:"Razgovor s upravlyayushchim",icon:"🔧",level:"A2",ru_title:"Разговор с управляющим",
+ words:[
+  {cz:"spravce",ru:"управляющий",ph:"[спра́вцэ]",ic:"🔧"},
+  {cz:"Je to rozbite.",ru:"Это сломано.",ph:"[йэ то розби́тэ]",ic:"💔"},
+  {cz:"Tece voda.",ru:"Течёт вода.",ph:"[тэчэ во́да]",ic:"💧"},
+  {cz:"Nefunguje topeni.",ru:"Не работает отопление.",ph:"[нэфунгуйэ топэни́]",ic:"🥶"},
+  {cz:"Sousede jsou hlasiti.",ru:"Соседи шумят.",ph:"[со́усэдэ йсоу hласи́ти]",ic:"📢"},
+  {cz:"Kdy to opravite?",ru:"Когда почините?",ph:"[кди то оправи́тэ?]",ic:"❓"},
+  {cz:"Co mam delat?",ru:"Что мне делать?",ph:"[цо маам дьелат?]",ic:"🤷"},
+  {cz:"Zavolejte...",ru:"Позвоните...",ph:"[завол̂ейтэ]",ic:"📞"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Dobrý den, jsem spravce domu. Mohu pomoci?",ph:"[йсэм спра́вцэ до́му]",r:"Добрый день, я управляющий дома. Могу помочь?"},
+  {w:"S",n:"Svetlana",t:"Ano! V koupelně teče voda z kohoutku.",ph:"[в коу́пэлнэ тэчэ во́да с коhо́утку]",r:"Да! В ванной течёт вода из крана."},
+  {w:"L",n:"Lucie",t:"Jak dlouho to teče?",ph:"[як длоуhо то тэчэ?]",r:"Как давно течёт?"},
+  {w:"S",n:"Svetlana",t:"Od včerejška. A také nefunguje topení.",ph:"[од вчэрэйшка. нэфунгуйэ топэни́]",r:"Со вчерашнего дня. И не работает отопление."},
+  {w:"L",n:"Lucie",t:"Přijdu dnes odpoledne. Budete doma?",ph:"[пши́йду днэс отполэднэ]",r:"Приду сегодня после обеда. Вы будете дома?"},
+  {w:"S",n:"Svetlana",t:"Ano, budu doma od jedné hodiny.",ph:"[а́но, буду до́ма од е́дне hо́дини]",r:"Да, буду дома с часа."}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Máte nějaké problémy s bytem?",ph:"",r:"Есть ли у вас проблемы с квартирой?"},
+  {w:"O",n:"Olga",t:"Ano, sousedé nad námi jsou velmi hlasití. Už jsem to hlásila správci dvakrát.",ph:"",r:"Да, соседи сверху очень шумные. Я уже сообщала управляющему дважды."}
+ ],
+ ex:[
+  {q:"Как сказать «Не работает отопление»?",o:["Tece voda.","Nefunguje topeni.","Je to rozbite.","Jsou hlasiti."],c:1,ok:"Верно! Nefunguje topeni = Не работает отопление",no:"Нет. Отопление не работает = Nefunguje topeni"},
+  {q:"Что значит «Kdy to opravite?»",o:["Как чините?","Где чините?","Когда почините?","Зачем чинить?"],c:2,ok:"Правильно! Kdy = когда",no:"Нет. Kdy = когда"}
+ ]
+},
+{id:23,title:"Na urade",icon:"🏛️",level:"A2",ru_title:"На úřadě — в госоргане",
+ words:[
+  {cz:"urad",ru:"государственный орган",ph:"[у́жад]",ic:"🏛️"},
+  {cz:"doklad / prukaz",ru:"документ / удостоверение",ph:"[до́клад / пру́кас]",ic:"📄"},
+  {cz:"Potrebuji...",ru:"Мне нужно...",ph:"[потшэбуйи]",ic:"🙋"},
+  {cz:"Kde se mohu prihlasit?",ru:"Где зарегистрироваться?",ph:"[кдэ сэ мо́ху пши́hласит?]",ic:"❓"},
+  {cz:"formulář",ru:"бланк, форма",ph:"[форму́лаш]",ic:"📝"},
+  {cz:"Vyplnte prosim...",ru:"Заполните, пожалуйста...",ph:"[випл̂нтэ про́сим]",ic:"✏️"},
+  {cz:"čekárna / fronta",ru:"зал ожидания / очередь",ph:"[чэка́рна / фро́нта]",ic:"⏳"},
+  {cz:"Kdy bude hotovo?",ru:"Когда будет готово?",ph:"[кди будэ hо́тово?]",ic:"📅"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Dobrý den. Cim vam mohu pomoci?",ph:"[чим ваам мо́ху помо́ци?]",r:"Добрый день. Чем могу помочь?"},
+  {w:"S",n:"Svetlana",t:"Potřebuji prodloužit povolení k pobytu.",ph:"[потшэбуйи продлоу́жит поволэни к побиту]",r:"Мне нужно продлить вид на жительство."},
+  {w:"L",n:"Lucie",t:"Máte s sebou cestovní pas a fotografii?",ph:"[ма́тэ с сэбоу цэстовни́ пас а фотографии?]",r:"У вас с собой паспорт и фотография?"},
+  {w:"S",n:"Svetlana",t:"Ano, tady jsou dokumenty.",ph:"[а́но, та́ди йсоу доку́мэнти]",r:"Да, вот документы."},
+  {w:"L",n:"Lucie",t:"Vyplnte prosim tento formulář.",ph:"[випл̂нтэ про́сим тэнто форму́лаш]",r:"Заполните, пожалуйста, этот бланк."},
+  {w:"S",n:"Svetlana",t:"Děkuji. Kdy bude hotovo?",ph:"[дэ́куйи. кди будэ hо́тово?]",r:"Спасибо. Когда будет готово?"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Byl pro vás úřad těžký?",ph:"",r:"Трудно ли вам давался госорган?"},
+  {w:"O",n:"Olga",t:"Zpočátku ano. Ale teď vím, co přinést a co vyplnit. Doporučuji rezervovat termín online.",ph:"",r:"Сначала да. Но теперь знаю, что принести и заполнить. Советую бронировать время онлайн."}
+ ],
+ ex:[
+  {q:"Как сказать «Мне нужно продлить документы»?",o:["Kde je urad?","Potrebuji prodlouzit doklady.","Vyplnte formulář.","Kdy bude hotovo?"],c:1,ok:"Верно! Potrebuji = Мне нужно",no:"Нет. Мне нужно = Potrebuji"},
+  {q:"Что такое «formulář»?",o:["очередь","документ","бланк/форма","фотография"],c:2,ok:"Правильно! formulář = бланк, форма",no:"Нет. formulář = бланк, форма"}
+ ]
+},
+{id:24,title:"Razgovor v parke",icon:"🌳",level:"A2",ru_title:"Разговор в парке",
+ words:[
+  {cz:"Jake hezke pocasi!",ru:"Какая хорошая погода!",ph:"[яке́ hэзке́ по́часи!]",ic:"☀️"},
+  {cz:"Chodite sem casto?",ru:"Вы часто сюда ходите?",ph:"[ходи́тэ сэм ча́сто?]",ic:"❓"},
+  {cz:"Mam tady rada.",ru:"Мне здесь нравится.",ph:"[маам та́ди ра́да]",ic:"❤️"},
+  {cz:"Odkud jste?",ru:"Откуда вы?",ph:"[о́ткуд йстэ?]",ic:"🗺️"},
+  {cz:"Jak dlouho jste v Praze?",ru:"Как давно вы в Праге?",ph:"[як длоуhо йстэ в Пра́зэ?]",ic:"📅"},
+  {cz:"libi se mi tady",ru:"мне здесь нравится",ph:"[ли́би сэ ми та́ди]",ic:"😊"},
+  {cz:"Mam psa / kocku.",ru:"У меня собака / кошка.",ph:"[маам пса / кочку]",ic:"🐕"},
+  {cz:"Hezky den!",ru:"Хорошего дня!",ph:"[hэзки́ ден!]",ic:"🌟"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Dobrý den! Jake je dnes hezke pocasi!",ph:"[яке́ йэ днэс hэзке́ по́часи!]",r:"Добрый день! Какая сегодня хорошая погода!"},
+  {w:"S",n:"Svetlana",t:"Ano! Mám ráda takové dny. Chodíte sem často?",ph:"[маам ра́да та́ковэ дни. ходи́тэ сэм ча́сто?]",r:"Да! Мне нравятся такие дни. Вы часто сюда ходите?"},
+  {w:"L",n:"Lucie",t:"Každé ráno. Mám psa — nutí mě vstávat.",ph:"[каждэ ра́но. нути́ мнэ вста́ват]",r:"Каждое утро. У меня есть собака — заставляет вставать."},
+  {w:"S",n:"Svetlana",t:"Jak roztomilé! Jak se jmenuje?",ph:"[як розтоми́ле!]",r:"Как мило! Как его зовут?"},
+  {w:"L",n:"Lucie",t:"Říkáme mu Párek. Je to jezevčík.",ph:"[жи́каамэ му Па́рэк]",r:"Зовём его Парек (Сосиска). Это такса."},
+  {w:"S",n:"Svetlana",t:"Haha! Mám tady ráda. Lidé jsou přátelští.",ph:"[лиди́ йсоу пша́тэлшти]",r:"Ха-ха! Мне здесь нравится. Люди приветливые."}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Chodíte na procházky pravidelně?",ph:"",r:"Вы регулярно ходите на прогулки?"},
+  {w:"O",n:"Olga",t:"Ano, každý den alespoň půl hodiny. Vždycky potkám sousedy a popovídáme si. Tohle mi nejvíce pomohlo s češtinou.",ph:"",r:"Да, каждый день хотя бы полчаса. Всегда встречаю соседей и болтаем. Это больше всего помогло мне с чешским."}
+ ],
+ ex:[
+  {q:"Как сказать «Мне здесь нравится»?",o:["Chodim sem casto.","Mam tady rada.","Jake hezke pocasi!","Odkud jste?"],c:1,ok:"Верно! Mam tady rada = Мне здесь нравится",no:"Нет. Нравится здесь = Mam tady rada"},
+  {q:"Что значит «Chodite sem casto?»",o:["Вы часто сюда ходите?","Вы долго здесь?","Вы идёте домой?","Вы здесь живёте?"],c:0,ok:"Правильно! Chodite sem casto? = Вы часто сюда ходите?",no:"Нет. Chodite sem casto? = Вы часто сюда ходите?"}
+ ]
+},
+{id:25,title:"Itogovyj dialog",icon:"🏆",level:"A2",ru_title:"Итоговый диалог",
+ words:[
+  {cz:"Naucila jsem se...",ru:"Я научилась...",ph:"[нау́чила йсэм сэ]",ic:"📚"},
+  {cz:"Mluvim trochu cesky.",ru:"Говорю немного по-чешски.",ph:"[млуви́м тро́ху чэ́ски]",ic:"🗣️"},
+  {cz:"Rozumim vam.",ru:"Я вас понимаю.",ph:"[ро́зумим ваам]",ic:"👂"},
+  {cz:"Mluvte pomaleji.",ru:"Говорите помедленнее.",ph:"[млувтэ по́малейи]",ic:"🐢"},
+  {cz:"Jsem hrda na sebe.",ru:"Я горжусь собой.",ph:"[йсэм hрда́ на сэ́бэ]",ic:"🌟"},
+  {cz:"Cesky se mi libi!",ru:"Чешский мне нравится!",ph:"[чэ́ски сэ ми ли́би]",ic:"❤️"},
+  {cz:"Budu pokracovat!",ru:"Буду продолжать!",ph:"[буду покрачо́ват]",ic:"💪"},
+  {cz:"Gratuluju!",ru:"Поздравляю!",ph:"[гратулуйу!]",ic:"🎉"}
+ ],
+ sd:[
+  {w:"L",n:"Lucie",t:"Světlano, dnes je váš pětadvacátý lekce! Gratuluju!",ph:"[два́цатипати лэкцэ! гратулуйу!]",r:"Светлана, сегодня ваш двадцать пятый урок! Поздравляю!"},
+  {w:"S",n:"Svetlana",t:"Děkuji, Lucie! Jsem velmi rada. Naucila jsem se mnoho.",ph:"[йсэм вельми ра́да]",r:"Спасибо, Лючия! Я очень рада. Научилась многому."},
+  {w:"L",n:"Lucie",t:"Mluvíte teď mnohem lépe! Jak se cítíte?",ph:"[млуви́тэ тэдь мно́hем ле́пэ!]",r:"Вы теперь говорите намного лучше! Как вы себя чувствуете?"},
+  {w:"S",n:"Svetlana",t:"Cítím se skvěle! Jsem hrdá na sebe. Česky se mi líbí!",ph:"[ци́тим сэ сквьелэ! йсэм hрда́ на сэ́бэ]",r:"Чувствую себя отлично! Горжусь собой. Чешский мне нравится!"},
+  {w:"L",n:"Lucie",t:"Co budete dělat dál?",ph:"[цо будэтэ дьела́т даал?]",r:"Что будете делать дальше?"},
+  {w:"S",n:"Svetlana",t:"Budu pokračovat! A chci se přihlásit na kurz OPЯТЬ 25!",ph:"[буду покрачо́ват!]",r:"Буду продолжать! И хочу записаться на курс ОПЯТЬ 25!"},
+  {w:"L",n:"Lucie",t:"Perfektní! Jste úžasná studentka, Světlano!",ph:"[пэрфэктни́! йстэ у́жасна студэ́нтка!]",r:"Превосходно! Вы замечательная ученица, Светлана!"},
+  {w:"S",n:"Svetlana",t:"A vy jste skvělá učitelka, Lucie! Moc děkuji za vše!",ph:"[а ви йстэ сквьела́ учи́тэлка!]",r:"А вы замечательная учительница, Лючия! Большое спасибо за всё!"}
+ ],
+ od:[
+  {w:"L",n:"Lucie",t:"Olgo, co poradíte Světlaně?",ph:"",r:"Ольга, что вы посоветуете Светлане?"},
+  {w:"O",n:"Olga",t:"Mluvte cesky kazdy den! Divejte se na ceske filmy s titulky. Nebojte se chybovat. Za rok budete překvapená!",ph:"",r:"Говорите по-чешски каждый день! Смотрите чешские фильмы с субтитрами. Не бойтесь ошибаться. Через год удивитесь!"}
+ ],
+ ex:[
+  {q:"Как сказать «Я горжусь собой»?",o:["Jsem unavena.","Jsem hrda na sebe.","Citim se skvele!","Budu pokracovat."],c:1,ok:"Браво! Jsem hrda na sebe = Я горжусь собой! 🌟",no:"Нет. Горжусь собой = Jsem hrda na sebe"},
+  {q:"Что значит «Budu pokracovat»?",o:["Начну снова","Буду продолжать","Я закончила","Учусь завтра"],c:1,ok:"Отлично! Budu pokracovat = Буду продолжать! 💪",no:"Нет. Budu pokracovat = Буду продолжать"}
+ ]
+}
+];
+
+// STATE
+var curLesson = null;
+var curSpeed=1.0;
+var done = [];
+try { done = JSON.parse(localStorage.getItem('cs25') || '[]'); } catch(e){}
+
+// NAV
+function goHome(){
+  showScr('home'); setNav('nb-home');
+  document.getElementById('tb-name').textContent='Cestina Snadno';
+  document.getElementById('tb-sub').textContent='CHESHSKIJ LEGKO \u00b7 25 UROKOV';
+}
+function goProgress(){ buildProgress(); showScr('progress'); setNav('nb-progress'); }
+function goTab(n){
+  if(!curLesson){ openLesson(1); return; }
+  showScr(n); setNav('nb-'+n);
+}
+function showScr(id){
+  document.querySelectorAll('.scr').forEach(function(s){ s.classList.remove('on'); });
+  document.getElementById('scr-'+id).classList.add('on');
+  document.getElementById('main').scrollTop=0;
+}
+function setNav(id){
+  document.querySelectorAll('.nvi').forEach(function(b){ b.classList.remove('on'); });
+  var el=document.getElementById(id);
+  if(el) el.classList.add('on');
+}
+
+// BUILD HOME
+function buildHome(){
+  var g=document.getElementById('lesson-grid'), h='';
+  for(var i=0;i<L.length;i++){
+    var l=L[i];
+    var isDone=done.indexOf(l.id)>=0;
+    var isCur=!isDone&&(i===0||done.indexOf(L[i-1].id)>=0);
+    var cls=isDone?'done':isCur?'cur':'';
+    var ic=isDone?'\u2705':l.icon;
+    h+='<button class="lcard '+cls+'" onclick="openLesson('+l.id+')">'
+      +'<div class="lcard-ic">'+ic+'</div>'
+      +'<div class="lcard-num">\u0423\u0440\u043e\u043a '+l.id+' \u00b7 '+l.level+'</div>'
+      +'<div class="lcard-name">'+l.ru_title+'</div>'
+      +'</button>';
+  }
+  g.innerHTML=h;
+}
+
+// OPEN LESSON
+function openLesson(id){
+  curLesson=null;
+  for(var i=0;i<L.length;i++){ if(L[i].id===id){ curLesson=L[i]; break; } }
+  if(!curLesson) return;
+  document.getElementById('tb-name').textContent=curLesson.icon+' '+curLesson.ru_title;
+  document.getElementById('tb-sub').textContent='\u0423\u0440\u043e\u043a '+id+' \u0438\u0437 25 \u00b7 CESTINA SNADNO';
+  buildLesson(); buildWords(); buildExercises();
+  showScr('lesson'); setNav('nb-lesson');
+}
+
+// BUILD LESSON
+function buildLesson(){
+  var l=curLesson;
+  var pct=Math.round(done.length/L.length*100);
+  var h='<div class="lesson-hdr">'
+    +'<div><div class="lesson-title">'+l.icon+' '+l.ru_title+'</div>'
+    +'<div class="lesson-sub">\u0423\u0440\u043e\u043a '+l.id+' \u0438\u0437 25 \u2014 OPAT 25! &reg;</div></div>'
+    +'<span class="badge">'+l.level+'</span></div>'
+    +'<div class="pbar"><div class="pfill" style="width:'+pct+'%"></div></div>'
+    +'<div class="tip"><span>\u26a1</span><span>\u25b6 \u2014 \u0441\u043b\u0443\u0448\u0430\u0439\u0442\u0435 \u041b\u044e\u0447\u0438\u044e. \ud83c\udfa4 \u2014 \u0433\u043e\u0432\u043e\u0440\u0438\u0442\u0435 \u0441\u0430\u043c\u0438! 0.8\u00d7 = \u043c\u0435\u0434\u043b\u0435\u043d\u043d\u0435\u0435.</span></div>'
+    +'<div class="dtabs">'
+    +'<button class="dtab on" id="dtS" onclick="switchDlg(\'s\')">\ud83d\udc64 \u042f (\u0421\u0432\u0435\u0442\u043b\u0430\u043d\u0430)</button>'
+    +'<button class="dtab pu" id="dtO" onclick="switchDlg(\'o\')">\ud83d\udc69 \u041e\u043b\u044c\u0433\u0430 A2</button>'
+    +'</div>'
+    +'<div id="dlg-s">'+buildDlg(l.sd,'S')+'</div>'
+    +'<div id="dlg-o" style="display:none">'
+    +'<div class="tip pu"><span>\ud83d\udc69</span><span>\u041e\u043b\u044c\u0433\u0430 (A2) \u2014 \u0442\u043e\u0442 \u0436\u0435 \u0434\u0438\u0430\u043b\u043e\u0433, \u043d\u043e \u0441\u0432\u043e\u0431\u043e\u0434\u043d\u0435\u0435. \u0412\u0430\u0448\u0430 \u0446\u0435\u043b\u044c!</span></div>'
+    +buildDlg(l.od,'O')
+    +'</div>'
+    +'<button class="done-btn" onclick="markDone('+l.id+')">\u2705 \u0423\u0440\u043e\u043a \u043f\u0440\u043e\u0439\u0434\u0435\u043d! \u0414\u0430\u043b\u0435\u0435 &rarr;</button>';
+  document.getElementById('lesson-content').innerHTML=h;
+}
+
+function buildDlg(dialogs, type){
+  var h='';
+  for(var i=0;i<dialogs.length;i++){
+    var d=dialogs[i];
+    var isL=d.w==='L', isS=d.w==='S', isO=d.w==='O';
+    var txt=d.t.replace(/'/g,'&#39;').replace(/"/g,'&quot;');
+    var rid='r'+type+'_'+i;
+    var lbl=isL?' \u2014 \u0443\u0447\u0438\u0442\u0435\u043b\u044c\u043d\u0438\u0446\u0430':isO?' (A2)':' \u2014 \u0432\u044b!';
+    h+='<div class="arow">'
+      +'<div class="ava '+d.w+'" onclick="spk(\''+txt+'\','+(isL?'curSpeed':'0.95')+')">'
+      +d.w+'</div>'
+      +'<div class="bub '+d.w+'">'
+      +'<div class="bwho">'+d.n+lbl+'</div>'
+      +'<div class="bcz">'+d.t+'</div>'
+      +(d.ph?'<div class="bph">'+d.ph+'</div>':'')
+      +'<div class="bru">'+d.r+'</div>'
+      +'<div class="crow">'
+      +'<button class="pb'+(isO?' pu':'')+'" onclick="spk(\''+txt+'\','+(isL?'curSpeed':'0.95')+')">\u25b6</button>';
+    if(isL){
+      h+='<div class="sps" id="sps_'+rid+'">'
+        +'<button class="sp" onclick="setSpd(0.7,this,\'sps_'+rid+'\')">0.7\u00d7</button>'
+        +'<button class="sp on" onclick="setSpd(1,this,\'sps_'+rid+'\')">1\u00d7</button>'
+        +'</div>';
+      // Микрофон Повторю! — Светлана повторяет фразу Лючии
+      var lrid='rLrep'+type+i;
+      h+='<button class="micbtn" id="mic_'+lrid+'" '
+        +'onclick="startRec(\'mic_'+lrid+'\',\''+txt+'\',\''+lrid+'\')">'
+        +'&#x1F3A4; Говорю!'
+        +'</button>'
+        +'<div class="splayer" style="border-color:var(--g);background:var(--gl)" id="pl_'+lrid+'">'
+        +'<div class="splayer-lbl" style="color:var(--gd)">&#x1F3A7; Моё повторение:</div>'
+        +'<div class="spl-row">'
+        +'<button class="spl-play" onclick="playRec(\''+lrid+'\')">'
+        +'\u25B6</button>'
+        +'<div class="spl-wave" style="background:var(--gl)" id="wv_'+lrid+'">'
+        +'<div class="sw" style="background:var(--g)"></div><div class="sw" style="background:var(--g)"></div><div class="sw" style="background:var(--g)"></div>'
+        +'<div class="sw" style="background:var(--g)"></div><div class="sw" style="background:var(--g)"></div><div class="sw" style="background:var(--g)"></div>'
+        +'<div class="sw" style="background:var(--g)"></div><div class="sw" style="background:var(--g)"></div><div class="sw" style="background:var(--g)"></div>'
+        +'<div class="sw" style="background:var(--g)"></div><div class="sw" style="background:var(--g)"></div><div class="sw" style="background:var(--g)"></div>'
+        +'</div></div>'
+        +'<div class="cmp-row">'
+        +'<button class="cmp-l" onclick="spk(\''+txt+'\',curSpeed)">\u25B6 \u041B\u044E\u0447\u0438\u044F</button>'
+        +'<button class="cmp-me" style="border-color:var(--g);color:var(--gd);background:var(--gl)" onclick="playRec(\''+lrid+'\')">\u25B6 \u042F</button>'
+        +'<span class="cmp-hint">Сравните!</span>'
+        +'</div></div>';
+    }
+    if(isS||isO){
+      var mc=isO?'micbtn pu-mic':'micbtn';
+      var pc=isO?'splayer pu-pl':'splayer';
+      h+='<button class="'+mc+'" id="mic_'+rid+'" onclick="startRec(\'mic_'+rid+'\',\''+txt+'\',\''+rid+'\')">&#x1F3A4; \u0413\u043e\u0432\u043e\u0440\u044e!</button>'
+        +'<div class="'+pc+'" id="pl_'+rid+'">'
+        +'<div class="splayer-lbl">&#x1F3A7; \u041c\u043e\u0451 \u043f\u0440\u043e\u0438\u0437\u043d\u043e\u0448\u0435\u043d\u0438\u0435:</div>'
+        +'<div class="spl-row">'
+        +'<button class="spl-play" onclick="playRec(\''+rid+'\')">\u25b6</button>'
+        +'<div class="spl-wave" id="wv_'+rid+'">'
+        +'<div class="sw"></div><div class="sw"></div><div class="sw"></div>'
+        +'<div class="sw"></div><div class="sw"></div><div class="sw"></div>'
+        +'<div class="sw"></div><div class="sw"></div><div class="sw"></div>'
+        +'<div class="sw"></div><div class="sw"></div><div class="sw"></div>'
+        +'</div></div>'
+        +'<div class="cmp-row">'
+        +'<button class="cmp-l" onclick="spk(\''+txt+'\',curSpeed)">\u25b6 \u041b\u044e\u0447\u0438\u044f</button>'
+        +'<button class="cmp-me'+(isO?' pu':'')+'" onclick="playRec(\''+rid+'\')">\u25b6 \u042f</button>'
+        +'<span class="cmp-hint">\u0421\u0440\u0430\u0432\u043d\u0438\u0442\u0435!</span>'
+        +'</div></div>';
+    }
+    h+='</div></div></div>';
+  }
+  return h;
+}
+
+function switchDlg(who){
+  document.getElementById('dlg-s').style.display=who==='s'?'block':'none';
+  document.getElementById('dlg-o').style.display=who==='o'?'block':'none';
+  document.getElementById('dtS').className='dtab'+(who==='s'?' on':'');
+  document.getElementById('dtO').className='dtab pu'+(who==='o'?' on':'');
+}
+
+// WORDS
+function buildWords(){
+  var l=curLesson;
+  document.getElementById('words-title').textContent='\u0421\u043b\u043e\u0432\u0430 \u2014 '+l.ru_title;
+  var h='';
+  for(var i=0;i<l.words.length;i++){
+    var w=l.words[i];
+    var txt=w.cz.replace(/'/g,'&#39;').replace(/"/g,'&quot;');
+    h+='<button class="wcard" onclick="spk(\''+txt+'\',0.8)">'
+      +'<div class="wic">'+w.ic+'</div>'
+      +'<div class="wcz">'+w.cz+'</div>'
+      +'<div class="wru">'+w.ru+'</div>'
+      +'<div class="wph">'+w.ph+'</div>'
+      +'</button>';
+  }
+  document.getElementById('words-grid').innerHTML=h;
+}
+
+// EXERCISES
+function buildExercises(){
+  var l=curLesson, h='';
+  for(var i=0;i<l.ex.length;i++){
+    var ex=l.ex[i];
+    h+='<div class="excard">'
+      +'<div class="exnum">\u0417\u0430\u0434\u0430\u043d\u0438\u0435 '+(i+1)+' \u0438\u0437 '+l.ex.length+'</div>'
+      +'<div class="exq">'+ex.q+'</div>'
+      +'<div class="opts" id="opts'+l.id+'_'+i+'">';
+    for(var j=0;j<ex.o.length;j++){
+      var ot=ex.o[j].replace(/'/g,'&#39;').replace(/"/g,'&quot;');
+      h+='<button class="opt" onclick="chk('+l.id+','+i+','+j+','+ex.c+',\''+ot+'\')">'+ex.o[j]+'</button>';
+    }
+    h+='</div><div class="fb" id="fb'+l.id+'_'+i+'"></div></div>';
+  }
+  document.getElementById('ex-content').innerHTML=h;
+}
+
+function chk(lid,ei,oi,correct,txt){
+  var opts=document.getElementById('opts'+lid+'_'+ei);
+  if(!opts) return;
+  var btns=opts.querySelectorAll('.opt');
+  for(var i=0;i<btns.length;i++) btns[i].disabled=true;
+  btns[oi].classList.add(oi===correct?'ok':'no');
+  var fb=document.getElementById('fb'+lid+'_'+ei);
+  fb.style.display='block';
+  var ex=curLesson.ex[ei];
+  if(oi===correct){ fb.className='fb ok'; fb.innerHTML='\u2705 '+ex.ok; spk(txt,0.9); }
+  else { fb.className='fb no'; fb.innerHTML='\u274c '+ex.no; }
+}
+
+// PROGRESS
+function buildProgress(){
+  document.getElementById('p-l').textContent=done.length;
+  document.getElementById('p-w').textContent=done.length*8;
+  var h='';
+  for(var i=0;i<L.length;i++){
+    var l=L[i];
+    var isDone=done.indexOf(l.id)>=0;
+    var isCur=curLesson&&curLesson.id===l.id;
+    var ic=isDone?'\u2705':l.icon;
+    var bdg=isDone?'<span class="pbdg bdg-ok">\u0413\u043e\u0442\u043e\u0432\u043e</span>'
+           :isCur?'<span class="pbdg bdg-now">\u0421\u0435\u0439\u0447\u0430\u0441</span>'
+           :'<span class="pbdg bdg-lock">\u0421\u043a\u043e\u0440\u043e</span>';
+    h+='<div class="prow"><div class="prow-ic">'+ic+'</div>'
+      +'<div class="prow-nm">\u0423\u0440\u043e\u043a '+l.id+' \u2014 '+l.ru_title+'</div>'+bdg+'</div>';
+  }
+  document.getElementById('prog-list').innerHTML=h;
+}
+
+// MARK DONE
+function markDone(id){
+  if(done.indexOf(id)<0){ done.push(id); try{ localStorage.setItem('cs25',JSON.stringify(done)); }catch(e){} }
+  buildHome();
+  var next=null;
+  for(var i=0;i<L.length;i++){ if(done.indexOf(L[i].id)<0){ next=L[i]; break; } }
+  if(next){
+    if(confirm('\u0423\u0440\u043e\u043a '+id+' \u043f\u0440\u043e\u0439\u0434\u0435\u043d! \ud83c\udf89\n\u041f\u0435\u0440\u0435\u0439\u0442\u0438 \u043a \u0443\u0440\u043e\u043a\u0443 '+next.id+' \u2014 '+next.ru_title+'?')){ openLesson(next.id); }
+    else goHome();
+  } else {
+    alert('\ud83c\udfc6 \u041f\u043e\u0437\u0434\u0440\u0430\u0432\u043b\u044f\u0435\u043c! \u0412\u0441\u0435 25 \u0443\u0440\u043e\u043a\u043e\u0432 \u043f\u0440\u043e\u0439\u0434\u0435\u043d\u044b!\n\u0414\u043e\u0431\u0440\u043e \u043f\u043e\u0436\u0430\u043b\u043e\u0432\u0430\u0442\u044c \u0432 OPAT 25! \u00ae');
+    goProgress();
+  }
+}
+
+// SPEECH — fixed rate with setTimeout
+function spk(text, rate) {
+  if (!window.speechSynthesis) return;
+  rate = (typeof rate !== 'undefined') ? parseFloat(rate) : curSpeed;
+  window.speechSynthesis.cancel();
+  setTimeout(function() {
+    if (rate < 0.85) {
+      spkSlow(text, rate);
+    } else {
+      spkDirect(text, 1.0);
+    }
+  }, 80);
+}
+
+function spkDirect(text, rate) {
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'cs-CZ';
+  u.rate = rate;
+  u.pitch = 1.0;
+  applyVoice(u);
+  window.speechSynthesis.speak(u);
+}
+
+function spkSlow(text, rate) {
+  // Разбиваем на группы слов + паузы между ними
+  // Это гарантирует замедление на ЛЮБОМ браузере/голосе
+  var words = text.split(' ');
+  var chunks = [];
+  for (var i = 0; i < words.length; i += 2) {
+    var chunk = words.slice(i, Math.min(i + 2, words.length)).join(' ');
+    if (chunk) chunks.push(chunk);
+  }
+  // Пауза: rate=0.7 → 350ms, rate=0.75 → 250ms
+  var pauseMs = Math.round((1.0 - rate) * 1800); // longer pauses for clearer speech
+  var idx = 0;
+  function next() {
+    if (idx >= chunks.length) return;
+    var u = new SpeechSynthesisUtterance(chunks[idx]);
+    u.lang = 'cs-CZ';
+    u.rate = 0.85; // slightly slower pronunciation within each chunk
+    u.pitch = 1.0;
+    applyVoice(u);
+    u.onend = function() {
+      idx++;
+      if (idx < chunks.length) setTimeout(next, pauseMs);
+    };
+    window.speechSynthesis.speak(u);
+  }
+  next();
+}
+
+function applyVoice(utterance) {
+  var voices = window.speechSynthesis.getVoices();
+  for (var i = 0; i < voices.length; i++) {
+    if (voices[i].lang && voices[i].lang.indexOf('cs') === 0) {
+      utterance.voice = voices[i]; return;
+    }
+  }
+}
+
+function setSpd(s,btn,gid){
+  curSpeed=s;
+  var g=document.getElementById(gid);
+  if(!g) return;
+  g.querySelectorAll('.sp').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+}
+
+// RECORDING
+var mRec=null, aChunks={}, aURLs={}, aRid=null;
+
+function startRec(btnId,phrase,rid){
+  var btn=document.getElementById(btnId);
+  if(!btn) return;
+  if(mRec&&mRec.state==='recording'){ mRec.stop(); return; }
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ recFail(btnId); return; }
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    aRid=rid; aChunks[rid]=[];
+    var opts={};
+    if(typeof MediaRecorder!=='undefined'&&MediaRecorder.isTypeSupported){
+      if(MediaRecorder.isTypeSupported('audio/webm')) opts.mimeType='audio/webm';
+      else if(MediaRecorder.isTypeSupported('audio/ogg')) opts.mimeType='audio/ogg';
+    }
+    try{ mRec=new MediaRecorder(stream,opts); }catch(e){ mRec=new MediaRecorder(stream); }
+    mRec.ondataavailable=function(e){ if(e.data&&e.data.size>0) aChunks[rid].push(e.data); };
+    mRec.onstop=function(){
+      stream.getTracks().forEach(function(t){ t.stop(); });
+      var blob=new Blob(aChunks[rid],{type:opts.mimeType||'audio/webm'});
+      if(aURLs[rid]) try{ URL.revokeObjectURL(aURLs[rid]); }catch(e){}
+      aURLs[rid]=URL.createObjectURL(blob);
+      var b=document.getElementById(btnId);
+      if(b){ b.classList.remove('rec'); b.innerHTML='\u2705 \u0417\u0430\u043f\u0438\u0441\u0430\u043d\u043e! \u0415\u0449\u0451 \u0440\u0430\u0437?'; setTimeout(function(){ if(b) b.innerHTML='&#x1F3A4; \u0413\u043e\u0432\u043e\u0440\u044e!'; },3000); }
+      showPl(rid); animW('wv_'+rid); aRid=null;
+    };
+    mRec.start(100); btn.classList.add('rec');
+    btn.innerHTML='<span class="rdot"></span> \u0421\u0442\u043e\u043f';
+    setTimeout(function(){ if(mRec&&mRec.state==='recording'&&aRid===rid) mRec.stop(); },8000);
+  }).catch(function(){ recFail(btnId); });
+}
+
+function recFail(btnId){
+  var btn=document.getElementById(btnId);
+  if(!btn) return;
+  btn.innerHTML='\u26a0\ufe0f \u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u0435 \u043c\u0438\u043a\u0440\u043e\u0444\u043e\u043d';
+  setTimeout(function(){ if(btn) btn.innerHTML='&#x1F3A4; \u0413\u043e\u0432\u043e\u0440\u044e!'; },3000);
+}
+
+function playRec(rid){
+  var url=aURLs[rid];
+  if(!url){ alert('\u0421\u043d\u0430\u0447\u0430\u043b\u0430 \u0437\u0430\u043f\u0438\u0448\u0438\u0442\u0435 \u0433\u043e\u043b\u043e\u0441 \u2014 \u043d\u0430\u0436\u043c\u0438\u0442\u0435 \u00ab&#x1F3A4; \u0413\u043e\u0432\u043e\u0440\u044e!\u00bb'); return; }
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  var a=new Audio(url);
+  a.play().catch(function(){});
+  animW('wv_'+rid);
+}
+
+function showPl(rid){ var pl=document.getElementById('pl_'+rid); if(pl) pl.classList.add('show'); }
+
+function animW(wid){
+  var w=document.getElementById(wid);
+  if(!w) return;
+  var bars=w.querySelectorAll('.sw'), t=0;
+  var iv=setInterval(function(){
+    bars.forEach(function(b){ b.style.height=(15+Math.random()*70)+'%'; });
+    if(++t>14){ clearInterval(iv); bars.forEach(function(b){ b.style.height='25%'; }); }
+  },130);
+}
+
+// INIT
+if(window.speechSynthesis){
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged=function(){ window.speechSynthesis.getVoices(); };
+}
+var hasDone=false;
+try{ hasDone=JSON.parse(localStorage.getItem('cs25')||'[]').length>0; }catch(e){}
+if(hasDone){ showScr('home'); setNav('nb-home'); }
+
+// ══════════════════════════════════════════════
+// ПРОВЕРКА ГОЛОСА И МОДАЛЬНОЕ ОКНО
+// ══════════════════════════════════════════════
+function detectPlatform() {
+  var ua = navigator.userAgent.toLowerCase();
+  if (/iphone|ipad|ipod/.test(ua)) return 'ios';
+  if (/android/.test(ua)) return 'android';
+  if (/mac/.test(ua)) return 'mac';
+  if (/win/.test(ua)) return 'win';
+  return 'other';
+}
+
+function checkVoiceAndShow() {
+  // Показываем только если раньше не видели
+  if (localStorage.getItem('cs25voice')) return;
+  
+  setTimeout(function() {
+    var voices = window.speechSynthesis.getVoices();
+    var czVoice = null;
+    for (var i = 0; i < voices.length; i++) {
+      if (voices[i].lang && voices[i].lang.indexOf('cs') === 0) {
+        czVoice = voices[i]; break;
+      }
+    }
+    
+    var modal = document.getElementById('voice-modal');
+    modal.classList.add('show');
+    
+    if (czVoice) {
+      // Голос найден!
+      document.getElementById('vm-ok').style.display = 'block';
+      document.getElementById('vm-voice-name').textContent = czVoice.name;
+      document.getElementById('vm-err').style.display = 'none';
+    } else {
+      // Голос не найден — показываем инструкцию для платформы
+      document.getElementById('vm-err').style.display = 'block';
+      var platform = detectPlatform();
+      var platformEl = document.getElementById('vm-' + platform);
+      if (platformEl) platformEl.style.display = 'block';
+      else {
+        // Показываем все инструкции
+        document.getElementById('vm-android').style.display = 'block';
+        document.getElementById('vm-ios').style.display = 'block';
+      }
+    }
+  }, 1500);
+}
+
+function closeVoiceModal() {
+  document.getElementById('voice-modal').classList.remove('show');
+  localStorage.setItem('cs25voice', '1');
+}
+
+buildHome();
+checkVoiceAndShow();
+</script>
+</body>
+</html>
